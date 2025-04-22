@@ -17,7 +17,6 @@ export default StyleSheet.create({
 
   },
   text: {
-
     fontSize: 26,
     fontWeight: "light",
     color: "#1D2951",
@@ -28,7 +27,8 @@ export default StyleSheet.create({
     barStyle: "light-content",
   },
   card: {
-    width: 350,
+    width: 250,
+    height: 290,
     marginVertical: 20,
     borderRadius: 10,
     backgroundColor: '#f9f8f4',
@@ -37,13 +37,12 @@ export default StyleSheet.create({
     borderStyle: 'dotted',
     borderColor: 'black',
     borderWidth: 5,
-    
-
   },
+
   image: {
     marginTop: 50,
     width: '90%',
-    height: 200,
+    height: 100,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     resizeMode: 'contain',
