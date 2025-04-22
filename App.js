@@ -1,11 +1,10 @@
-import { StyleSheet } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
 
-import BottonTabNavigator from "./navigation/BottonTapNavigator";
+import { NavigationContainer } from "@react-navigation/native";
+import MainStackNavigator from "./navigation/MainStacNavigator";
 export default function App() {
   return (
     <NavigationContainer>
-      <BottonTabNavigator />
+      <MainStackNavigator />
     </NavigationContainer>
   );
 }
