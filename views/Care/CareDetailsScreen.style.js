@@ -9,13 +9,11 @@ export default StyleSheet.create({
     backgroundColor: "#245e4b",
   },
   content: {
-    flexGrow: 1,
-    backgroundColor: "#fff4ea",
     padding: 16,
     alignItems: "center",
     justifyContent: "center",
     gap: 8,
-    paddingHorizontal: 16,
+    flexGrow: 1,
   },
   text: {
     fontSize: 24,
