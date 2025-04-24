@@ -1,12 +1,26 @@
 import React from "react";
-import { View, FlatList, SafeAreaView, StatusBar } from "react-native";
+import { View, Dimensions, SafeAreaView, StatusBar } from "react-native";
 
 import Header from "../../components/Layouts/Header";
 import styles from "./CareDetailsScreen.style";
-import CardCare from "../../components/Care/CardCare";
+import SliderItemCare from "../../components/Care/SliderItemCare";
+import Animated, {
+  useAnimatedScrollHandler,
+  useSharedValue,
+} from "react-native-reanimated";
 
 export default function CareDetailScreen({ route }) {
   const { title, data } = route.params;
+  const scrollX = useSharedValue(0);
+  const onScrollHandler = useAnimatedScrollHandler({
+    onScroll: (e) => {
+      "worklet";
+      scrollX.value = e.contentOffset.x;
+    },
+  });
+  const width = Dimensions.get("window").width;
+  const CARD_WIDTH = width * 0.8;
+  const CARD_SPACING = 20;
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -20,22 +34,28 @@ export default function CareDetailScreen({ route }) {
       </View>
 
       <View style={{ flex: 1, backgroundColor: "#fff4ea" }}>
-        <FlatList
+        <Animated.FlatList
           data={data}
-          numColumns={2}
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
           keyExtractor={(item) => item.id.toString()}
-          contentContainerStyle={styles.content}
           renderItem={({ item, index }) => (
-            <View
-              style={{
-                marginRight: index % 2 === 0 ? 16 : 0,
-                marginBottom: 16,
-              }}
-            >
-              <CardCare title={item.title} image={item.image} />
-            </View>
+            <SliderItemCare
+              title={item.title}
+              image={item.image}
+              description={item.description}
+              scrollX={scrollX}
+              index={index}
+            />
           )}
-          ListFooterComponent={<View style={{ height: 32 }} />}
+          onScroll={onScrollHandler}
+          decelerationRate="fast"
+          snapToInterval={CARD_WIDTH + CARD_SPACING}
+          snapToAlignment="center"
+          contentContainerStyle={{
+            paddingHorizontal: (width - CARD_WIDTH) / 2 - CARD_SPACING / 2,
+          }}
         />
       </View>
     </SafeAreaView>
