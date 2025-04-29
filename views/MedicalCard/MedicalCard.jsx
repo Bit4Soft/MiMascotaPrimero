@@ -1,48 +1,64 @@
-import React, { useState } from "react";
-import { SafeAreaView, Text, ScrollView, View, Image,TouchableOpacity, Alert } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  SafeAreaView,
+  Text,
+  ScrollView,
+  View,
+  Image,
+  Alert,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import Header from "../../components/Layouts/Header";
 import styles from "./MedicalCard.style";
 import InputText from "../../components/InputText/InputText";
 import PetImagePicker from "../../components/SelectImage/SelectImage";
-import CustomDropdown from "../../components/Dropdown/DropDown";
 import { StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import {
+  RazasPerros,
+  RazasGatos,
+  Sexos,
+  TipoAnimal,
+} from "../../constants/pet";
+
+import CustomDropdown from "../../components/Dropdown/DropDown";
+import { formatExpedient } from "../../utils/formatExpedient";
 
 export default function MedicalCard() {
-  const navigation = useNavigation(); 
-  const [selectedTipoAnimal, setSelectedTipoAnimal] = useState(null);
-  const [selectedSexo, setSelectedSexo] = useState(null);
-  const [selectedRaza, setSelectedRaza] = useState(null);
+  //Variable para la navegacion
+  const navigation = useNavigation();
+
+  // Estado para la imagen de la mascota
   const [petImage, setPetImage] = useState(null);
-  const [nombre, setNombre] = useState("");
-  const [fechaNacimiento, setFechaNacimiento] = useState("");
-  const [expediente, setExpediente] = useState("");
-  const [senasParticulares, setSenasParticulares] = useState("");
-  const [microchip, setMicrochip] = useState("");
 
-  const TipoAnimal = [
-    { label: 'Perro', value: 'perro' },
-    { label: 'Gato', value: 'gato' },
-  ];
+  // Estado para los datos de la mascota
+  const [petData, setPetData] = useState({
+    nombre: "",
+    fechaNacimiento: "",
+    selectedTipoAnimal: null,
+    selectedSexo: null,
+    selectedRaza: null,
+    expedienteClinico: "",
+    senasParticulares: "",
+    microchip: "",
+    petImage: null,
+    peso: "",
+  });
 
-  const Sexos = [
-    { label: 'Macho', value: 'macho' },
-    { label: 'Hembra', value: 'hembra' },
-  ];
+  //UseEffect para manejar el cambio de raza
+  useEffect(() => {
+    setPetData((prev) => ({ ...prev, selectedRaza: "" }));
+  }, [petData.selectedTipoAnimal]);
 
-  const Razas = [
-    { label: 'Labrador', value: 'labrador' },
-    { label: 'Bulldog', value: 'bulldog' },
-    { label: 'Persa', value: 'persa' },
-  ];
-
-
-
+  // Funcion para guardar la imagen seleccionada en el estado
   const handleImageSelected = (uri) => {
     setPetImage(uri);
   };
-  
+
   const handleContinue = () => {
+    const { nombre, selectedTipoAnimal, selectedSexo } = petData;
     if (!nombre || !selectedTipoAnimal || !selectedSexo) {
       Alert.alert(
         "Campos requeridos",
@@ -53,170 +69,170 @@ export default function MedicalCard() {
     }
     navigation.navigate("Othersdata", {
       petData: {
-        nombre,
-        fechaNacimiento,
-        tipoAnimal: selectedTipoAnimal,
-        sexo: selectedSexo,
-        raza: selectedRaza,
-        expediente,
-        senasParticulares,
-        microchip,
-        petImage
-      }
+        nombre: petData.nombre,
+        fechaNacimiento: petData.fechaNacimiento,
+        tipoAnimal: petData.selectedTipoAnimal,
+        sexo: petData.selectedSexo,
+        raza: petData.selectedRaza,
+        expediente: petData.expedienteClinico,
+        senasParticulares: petData.senasParticulares,
+        microchip: petData.microchip,
+        petImage: petData.petImage,
+        peso: petData.peso,
+      },
     });
-  }
+  };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.headerWrapper}>
-        <Header title="Datos de la Mascota" />
-      </View>
-      
-      <ScrollView 
-        contentContainerStyle={styles.content}
-        style={styles.scrollView}
-      >
-        {/* Primera sección de dos columnas (Imagen + Datos básicos) */}
-        <View style={styles.twoColumnContainer}>
-          <View style={styles.column}>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.headerWrapper}>
+          <Header
+            title="Datos de la Mascota"
+            icon={require("../../assets/icons/arrow-return.png")}
+          />
+        </View>
+
+        <ScrollView
+          nestedScrollEnabled={true}
+          contentContainerStyle={styles.content}
+          style={styles.scrollView}
+        >
+          {/* Primera sección de dos columnas (Imagen + Datos básicos) */}
+          <View style={styles.firstSectionContainer}>
             <View style={styles.imageContainer}>
               <PetImagePicker onImageSelected={handleImageSelected} />
               {petImage && (
-                <Image 
-                  source={{ uri: petImage }} 
+                <Image
+                  source={{ uri: petImage }}
                   style={StyleSheet.absoluteFill}
                   resizeMode="cover"
                 />
               )}
             </View>
-          </View>
-          
-          <View style={styles.columnSpacer} />
-          
-          <View style={[styles.column, styles.formContainer]}>
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Nombre</Text>
-              <InputText 
-                placeholder="Nombre de tu mascota" 
-                value={nombre}
-                onChangeText={setNombre}
+            <View style={styles.dataContainer}>
+              <Text style={styles.text}>Nombre</Text>
+              <InputText
                 style={styles.input}
+                placeholder="Hugo Montaño"
+                value={petData.nombre}
+                keyboardType="default"
+                onChangeText={(text) =>
+                  setPetData({ ...petData, nombre: text })
+                }
               />
-            </View>
-            
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Fecha de Nacimiento</Text>
-              <InputText 
+              <Text style={styles.text}>Fecha de Nacimiento</Text>
+              <InputText
+                style={styles.input}
                 placeholder="DD/MM/AAAA"
-                value={fechaNacimiento}
-                onChangeText={setFechaNacimiento}
-                style={styles.input}
+                value={petData.fechaNacimiento}
+                onChangeText={(text) =>
+                  setPetData({ ...petData, fechaNacimiento: text })
+                }
               />
             </View>
           </View>
-        </View>
+          {/* Segunda sección de dos columnas (Tipo de animal + Sexo) */}
+          <View style={styles.secondSectionContainer}>
+            <Text style={styles.text}>Num. de expediente clinio</Text>
+            <InputText
+              style={styles.input}
+              placeholder="2025-04-12345"
+              value={petData.expedienteClinico}
+              keyboardType="numeric"
+              onChangeText={(text) =>
+                setPetData({
+                  ...petData,
+                  expedienteClinico: formatExpedient(text),
+                })
+              }
+            />
+            <View style={styles.row}>
+              <View style={styles.column}>
+                <Text style={styles.text}>Tipo de animal</Text>
+                <CustomDropdown
+                  items={TipoAnimal}
+                  value={petData.selectedTipoAnimal}
+                  placeholder="Selecciona tipo"
+                  onSelect={(item) =>
+                    setPetData({
+                      ...petData,
+                      selectedTipoAnimal: item.value,
+                    })
+                  }
+                  style={styles.dropdown}
+                />
 
-        {/* Input de expediente clínico (ancho completo) */}
-        <View style={styles.fullWidthContainer}>
-          <Text style={styles.label}>Num. de Expediente Clínico</Text>
-          <InputText
-            placeholder="ID 20268426826486"
-            value={expediente}
-            onChangeText={setExpediente}
-            style={styles.input}
-          />
-        </View>
+                <Text style={styles.text}>Raza</Text>
+                <CustomDropdown
+                  items={
+                    petData.selectedTipoAnimal === "perro"
+                      ? RazasPerros
+                      : RazasGatos
+                  }
+                  value={petData.selectedRaza}
+                  placeholder="Selecciona tipo"
+                  onSelect={(text) =>
+                    setPetData({ ...petData, selectedRaza: text })
+                  }
+                  style={styles.dropdown}
+                />
+              </View>
+              <View style={styles.column}>
+                <Text style={styles.text}>Sexo</Text>
+                <CustomDropdown
+                  items={Sexos}
+                  value={petData.selectedSexo}
+                  placeholder="Selecciona tipo"
+                  onSelect={(text) =>
+                    setPetData({ ...petData, selectedSexo: text })
+                  }
+                  style={styles.dropdown}
+                />
 
-        {/* Segunda sección de dos columnas */}
-        <View style={styles.twoColumnContainer}>
-          <View style={styles.column}>
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Tipo de animal</Text>
-              <CustomDropdown
-                items={TipoAnimal}
-                value={selectedTipoAnimal}
-                placeholder="Selecciona tipo"
-                onSelect={setSelectedTipoAnimal}
-                style={styles.dropdown}
-              />
+                <Text style={styles.text}>Peso</Text>
+                <InputText
+                  style={styles.input}
+                  placeholder="20 kg"
+                  keyboardType="numeric"
+                  value={petData.peso}
+                  onChangeText={(text) =>
+                    setPetData({ ...petData, peso: text })
+                  }
+                />
+              </View>
             </View>
+            <Text style={styles.text}>Señas particulares</Text>
+            <InputText
+              style={styles.input}
+              placeholder="Es blanquito con manchas negras"
+              value={petData.senasParticulares}
+              onChangeText={(text) =>
+                setPetData({ ...petData, senasParticulares: text })
+              }
+            />
+            <Text style={styles.text}>Microchip</Text>
+            <InputText
+              style={styles.input}
+              placeholder="ID 2419401310302"
+              keyboardType="numeric"
+              value={petData.microchip}
+              onChangeText={(text) =>
+                setPetData({ ...petData, microchip: text })
+              }
+            />
+            <TouchableOpacity
+              style={styles.continueButton}
+              onPress={handleContinue}
+            >
+              <Text style={styles.continueButtonText}>Continuar</Text>
+            </TouchableOpacity>
           </View>
-          
-          <View style={styles.columnSpacer} />
-          
-          <View style={styles.column}>
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Sexo</Text>
-              <CustomDropdown
-                items={Sexos}
-                value={selectedSexo}
-                placeholder="Selecciona sexo"
-                onSelect={setSelectedSexo}
-                style={styles.dropdown}
-              />
-            </View>
-          </View>
-        </View>
-
-        {/* Tercera sección de dos columnas */}
-        <View style={styles.twoColumnContainer}>
-          <View style={styles.column}>
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Raza</Text>
-              <CustomDropdown
-                items={Razas}
-                value={selectedRaza}
-                placeholder="Selecciona raza"
-                onSelect={setSelectedRaza}
-                style={styles.dropdown}
-              />
-            </View>
-          </View>
-          
-          <View style={styles.columnSpacer} />
-          
-          <View style={styles.column}>
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Peso (kg)</Text>
-              <InputText
-                placeholder="Ej. 20"
-                keyboardType="numeric"
-                style={styles.input}
-              />
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.fullWidthContainer}>
-          <Text style={styles.label}>Señas particulares</Text>
-          <InputText
-            placeholder="Describa características físicas"
-            value={senasParticulares}
-            onChangeText={setSenasParticulares}
-            style={[styles.input, styles.multilineInput]}
-            multiline
-            numberOfLines={2}
-          />
-        </View>
-
-        <View style={styles.fullWidthContainer}>
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>No. ID microchip</Text>
-              <InputText
-                placeholder="ID 20023443"
-                value={microchip}
-                onChangeText={setMicrochip}
-                style={styles.input}
-              />
-            </View>
-            <TouchableOpacity 
-          style={styles.continueButton}
-          onPress={handleContinue}
-        >
-          <Text style={styles.continueButtonText}>Continuar</Text>
-        </TouchableOpacity>
-        </View>
-        {/* Última sección de dos columnas */}
-      </ScrollView>
-    </SafeAreaView>
-  );}
+        </ScrollView>
+      </SafeAreaView>
+    </KeyboardAvoidingView>
+  );
+}
