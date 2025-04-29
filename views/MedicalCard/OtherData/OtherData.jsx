@@ -5,7 +5,6 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Alert,
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
@@ -20,13 +19,12 @@ import { ActivityIndicator } from "react-native-paper";
 import { formatPhoneNumber } from "../../../utils/formatPhoneNumber";
 
 export default function DatosAdicionales({ route }) {
-  // Variable para la navegacion
   const navigation = useNavigation();
-  // Variable para guardar los datos de la mascota
   const { petData } = route.params || {};
   const [isLoading, setIsLoading] = useState(false);
 
-  //Estado para los datos del dueño
+  const [errors, setErrors] = useState({});
+
   const [userData, setUserData] = useState({
     nombre: "",
     direccion: "",
@@ -35,7 +33,6 @@ export default function DatosAdicionales({ route }) {
     createdAt: serverTimestamp(),
   });
 
-  //Estado para los datos de la clinica
   const [clinicaData, setClinicaData] = useState({
     nombreClinica: "",
     direccion: "",
@@ -50,14 +47,34 @@ export default function DatosAdicionales({ route }) {
     createdAt: serverTimestamp(),
   });
 
-  //Funcion para manejar el evento de finalizar registro
-  // Esta funcion se encarga de guardar los datos del dueño, clinica y mascota en la base de datos
+  const validateFields = () => {
+    const newErrors = {};
+
+    const requiredFields = {
+      user_nombre: userData.nombre,
+      user_telefono: userData.telefono,
+      user_email: userData.email,
+      user_direccion: userData.direccion,
+      clinica_direccion: clinicaData.direccion,
+      clinica_telefono: clinicaData.telefono,
+      clinica_email: clinicaData.email,
+      clinica_nombre: clinicaData.nombreClinica,
+      veterinario_nombre: clinicaData.veterinarios[0].nombreVete,
+      veterinario_cedula: clinicaData.veterinarios[0].cedula,
+    };
+
+    Object.entries(requiredFields).forEach(([key, value]) => {
+      if (!value || value.trim() === "") {
+        newErrors[key] = "Este campo es obligatorio";
+      }
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleFinalizar = async () => {
-    const { nombre, telefono } = userData;
-    const { nombreClinica } = clinicaData;
-    const { cedula, nombreVete } = clinicaData.veterinarios[0];
-    if (!nombre || !telefono || !nombreClinica || !nombreVete || !cedula) {
-      Alert.alert("Campos requeridos", "Complete los campos obligatorios");
+    if (!validateFields()) {
       return;
     }
 
@@ -76,31 +93,20 @@ export default function DatosAdicionales({ route }) {
         imageUrl = await getDownloadURL(storageRef);
       }
 
-      // Guardar datos del dueño
       const userRef = await addDoc(collection(db, "Users"), {
-        nombre: userData.nombre,
-        direccion: userData.direccion,
-        telefono: userData.telefono,
-        email: userData.email,
-        createdAt: userData.createdAt,
+        ...userData,
       });
 
-      // Guardar datos de la clínica
       const clinicRef = await addDoc(collection(db, "Clinicas"), {
-        nombre: clinicaData.nombreClinica,
-        direccion: clinicaData.direccion,
-        telefono: clinicaData.telefono,
-        email: clinicaData.email,
+        ...clinicaData,
         veterinarios: [
           {
             nombre: clinicaData.veterinarios[0].nombreVete,
             cedula: clinicaData.veterinarios[0].cedula,
           },
         ],
-        createdAt: clinicaData.createdAt,
       });
 
-      // Guardar datos de la mascota
       await addDoc(collection(db, "Mascota"), {
         ...petData,
         imageUrl: imageUrl,
@@ -126,6 +132,7 @@ export default function DatosAdicionales({ route }) {
       </View>
     );
   }
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -141,147 +148,160 @@ export default function DatosAdicionales({ route }) {
         </View>
 
         <ScrollView contentContainerStyle={styles.content}>
-          {/* User Data */}
           <View style={styles.container}>
             <View style={styles.ownerDataSection}>
               <Text style={styles.sectionTitle}>Datos del dueño</Text>
               <Text style={styles.text}>Nombre</Text>
               <InputText
-                style={styles.input}
+                style={[styles.input, errors.user_nombre && { borderColor: "red" }]}
                 placeholder="Hugo Montaño"
                 value={userData.nombre}
-                onChangeText={(text) =>
-                  setUserData({ ...userData, nombre: text })
-                }
+                onChangeText={(text) => {
+                  setUserData({ ...userData, nombre: text });
+                  if (errors.user_nombre) setErrors((e) => ({ ...e, user_nombre: null }));
+                }}
               />
+              {errors.user_nombre && <Text style={styles.errorText}>{errors.user_nombre}</Text>}
+
               <Text style={styles.text}>Direccion</Text>
               <InputText
-                style={styles.input}
+                style={[styles.input, errors.user_direccion&& { borderColor: "red" }]}
                 placeholder="Calle 123"
                 value={userData.direccion}
-                onChangeText={(text) =>
-                  setUserData({ ...userData, direccion: text })
-                }
+                onChangeText={(text) =>{
+
+                  setUserData({ ...userData, direccion: text });
+                  if (errors.user_direccion) setErrors((e) => ({ ...e, user_direccion: null }));
+                }}
               />
+               {errors.user_direccion && <Text style={styles.errorText}>{errors.user_direccion}</Text>}
+
               <View style={styles.row}>
                 <View style={styles.column}>
                   <Text style={styles.text}>Telefono</Text>
                   <InputText
-                    style={styles.input}
+                    style={[styles.input, errors.user_telefono && { borderColor: "red" }]}
                     placeholder="322-157-59-92"
-                    value={userData.telefono}
                     keyboardType="numeric"
-                    onChangeText={(text) =>
-                      setUserData({
-                        ...userData,
-                        telefono: formatPhoneNumber(text),
-                      })
-                    }
+                    value={userData.telefono}
+                    onChangeText={(text) => {
+                      setUserData({ ...userData, telefono: formatPhoneNumber(text) });
+                      if (errors.user_telefono) setErrors((e) => ({ ...e, user_telefono: null }));
+                    }}
                   />
+                  {errors.user_telefono && <Text style={styles.errorText}>{errors.user_telefono}</Text>}
                 </View>
                 <View style={styles.column}>
                   <Text style={styles.text}>Email</Text>
                   <InputText
-                    style={styles.input}
+                    style={[styles.input, errors.user_email && { borderColor: "red" }]}
                     placeholder="pet@gmail.com"
-                    value={userData.email}
                     keyboardType="email-address"
-                    onChangeText={(text) =>
-                      setUserData({ ...userData, email: text })
-                    }
+                    value={userData.email}
+                    onChangeText={(text) => {
+
+                      setUserData({ ...userData, email: text });
+                      if (errors.user_email) setErrors((e) => ({ ...e, user_email: null }));
+                    }}
                   />
+               {errors.user_email && <Text style={styles.errorText}>{errors.user_email}</Text>}
+
                 </View>
               </View>
             </View>
-            {/* Clinic Data */}
+
             <View style={styles.clinicDataSection}>
               <Text style={styles.sectionTitle}>Datos de la clinica</Text>
-
               <Text style={styles.text}>Nombre de la clinica</Text>
               <InputText
-                style={styles.input}
+                style={[styles.input, errors.clinica_nombre && { borderColor: "red" }]}
                 placeholder="Event Pet"
                 value={clinicaData.nombreClinica}
-                onChangeText={(text) =>
-                  setClinicaData({ ...clinicaData, nombreClinica: text })
-                }
+                onChangeText={(text) => {
+                  setClinicaData({ ...clinicaData, nombreClinica: text });
+                  if (errors.clinica_nombre) setErrors((e) => ({ ...e, clinica_nombre: null }));
+                }}
               />
+              {errors.clinica_nombre && <Text style={styles.errorText}>{errors.clinica_nombre}</Text>}
+
               <Text style={styles.text}>Direccion</Text>
               <InputText
-                style={styles.input}
+                style={[styles.input, errors.clinica_direccion && { borderColor: "red" }]}
                 placeholder="Calle 123"
                 value={clinicaData.direccion}
-                onChangeText={(text) =>
-                  setClinicaData({ ...clinicaData, direccion: text })
-                }
+                onChangeText={(text) =>{
+
+                  setClinicaData({ ...clinicaData, direccion: text });
+                  if (errors.clinica_direccion) setErrors((e) => ({ ...e, clinica_direccion: null }));
+                } }
               />
+                  {errors.clinica_direccion && <Text style={styles.errorText}>{errors.clinica_direccion}</Text>}
+
 
               <Text style={styles.text}>Nombre del veterinario</Text>
               <InputText
-                style={styles.input}
+                style={[styles.input, errors.veterinario_nombre && { borderColor: "red" }]}
                 placeholder="Saul Hernandez"
-                value={clinicaData.veterinarios.nombreVete}
-                onChangeText={(text) =>
-                  setClinicaData({
-                    ...clinicaData,
-                    veterinarios: [
-                      { ...clinicaData.veterinarios[0], nombreVete: text },
-                    ],
-                  })
-                }
+                value={clinicaData.veterinarios[0].nombreVete}
+                onChangeText={(text) => {
+                  const updatedVets = [{ ...clinicaData.veterinarios[0], nombreVete: text }];
+                  setClinicaData({ ...clinicaData, veterinarios: updatedVets });
+                  if (errors.veterinario_nombre) setErrors((e) => ({ ...e, veterinario_nombre: null }));
+                }}
               />
+              {errors.veterinario_nombre && <Text style={styles.errorText}>{errors.veterinario_nombre}</Text>}
+
               <Text style={styles.text}>Num. de cedula</Text>
               <InputText
-                style={styles.input}
+                style={[styles.input, errors.veterinario_cedula && { borderColor: "red" }]}
                 placeholder="1234567"
-                value={clinicaData.veterinarios.cedula}
                 keyboardType="numeric"
-                onChangeText={(text) =>
-                  setClinicaData({
-                    ...clinicaData,
-                    veterinarios: [
-                      { ...clinicaData.veterinarios[0], cedula: text },
-                    ],
-                  })
-                }
+                value={clinicaData.veterinarios[0].cedula}
+                onChangeText={(text) => {
+                  const updatedVets = [{ ...clinicaData.veterinarios[0], cedula: text }];
+                  setClinicaData({ ...clinicaData, veterinarios: updatedVets });
+                  if (errors.veterinario_cedula) setErrors((e) => ({ ...e, veterinario_cedula: null }));
+                }}
               />
+              {errors.veterinario_cedula && <Text style={styles.errorText}>{errors.veterinario_cedula}</Text>}
 
               <View style={styles.row}>
                 <View style={styles.column}>
                   <Text style={styles.text}>Telefono</Text>
                   <InputText
-                    style={styles.input}
+                    style={[styles.input, errors.clinica_telefono && { borderColor: "red" }]}
                     placeholder="322-157-59-92"
                     keyboardType="numeric"
                     value={clinicaData.telefono}
-                    onChangeText={(text) =>
-                      setClinicaData({
-                        ...clinicaData,
-                        telefono: formatPhoneNumber(text),
-                      })
-                    }
+                    onChangeText={(text) =>{
+                      setClinicaData({ ...clinicaData, telefono: formatPhoneNumber(text) })
+                      if (errors.clinica_telefono) setErrors((e) => ({ ...e, clinica_telefono: null }));}
+                      
+                    } 
                   />
+                  {errors.clinica_telefono && <Text style={styles.errorText}>{errors.clinica_telefono}</Text>}
                 </View>
                 <View style={styles.column}>
                   <Text style={styles.text}>Email</Text>
                   <InputText
-                    style={styles.input}
+                    style={[styles.input, errors.clinica_email && { borderColor: "red" }]}
                     placeholder="pet@gmail.com"
                     keyboardType="email-address"
                     value={clinicaData.email}
-                    onChangeText={(text) =>
+                    onChangeText={(text) => {
                       setClinicaData({ ...clinicaData, email: text })
-                    }
+                      if (errors.clinica_email) setErrors((e) => ({ ...e, clinica_email: null }));
+                    }}
+
                   />
+                  {errors.clinica_email && <Text style={styles.errorText}>{errors.clinica_email}</Text>}
+
                 </View>
               </View>
             </View>
           </View>
-          {/* Botón Finalizar */}
-          <TouchableOpacity
-            style={styles.continueButton}
-            onPress={handleFinalizar}
-          >
+
+          <TouchableOpacity style={styles.continueButton} onPress={handleFinalizar}>
             <Text style={styles.continueButtonText}>Finalizar Registro</Text>
           </TouchableOpacity>
         </ScrollView>

@@ -27,13 +27,9 @@ import CustomDropdown from "../../components/Dropdown/DropDown";
 import { formatExpedient } from "../../utils/formatExpedient";
 
 export default function MedicalCard() {
-  //Variable para la navegacion
   const navigation = useNavigation();
-
-  // Estado para la imagen de la mascota
   const [petImage, setPetImage] = useState(null);
 
-  // Estado para los datos de la mascota
   const [petData, setPetData] = useState({
     nombre: "",
     fechaNacimiento: "",
@@ -43,45 +39,48 @@ export default function MedicalCard() {
     expedienteClinico: "",
     senasParticulares: "",
     microchip: "",
-    petImage: null,
+    petImage: petImage,
     peso: "",
   });
 
-  //UseEffect para manejar el cambio de raza
+  const [errors, setErrors] = useState({});
+
   useEffect(() => {
     setPetData((prev) => ({ ...prev, selectedRaza: "" }));
   }, [petData.selectedTipoAnimal]);
 
-  // Funcion para guardar la imagen seleccionada en el estado
   const handleImageSelected = (uri) => {
     setPetImage(uri);
+    setPetData({ ...petData, petImage: uri });
+    if (errors.petImage) {
+      setErrors({ ...errors, petImage: null });
+    }
+  };
+
+  const validarCampos = () => {
+    const nuevosErrores = {};
+    Object.entries(petData).forEach(([key, value]) => {
+      if (!value) {
+        nuevosErrores[key] = "Por favor llena este campo";
+      }
+    });
+    setErrors(nuevosErrores);
+    return Object.keys(nuevosErrores).length === 0;
   };
 
   const handleContinue = () => {
-    const { nombre, selectedTipoAnimal, selectedSexo } = petData;
-    if (!nombre || !selectedTipoAnimal || !selectedSexo) {
-      Alert.alert(
-        "Campos requeridos",
-        "Por favor complete los campos obligatorios: Nombre, Tipo de animal y Sexo",
-        [{ text: "OK" }]
-      );
-      return;
-    }
+    const petDataFormateada = {
+      ...petData,
+      expedienteClinico: formatExpedient(petData.expedienteClinico),
+    };
+  
+    if (!validarCampos()) return;
+  
     navigation.navigate("Othersdata", {
-      petData: {
-        nombre: petData.nombre,
-        fechaNacimiento: petData.fechaNacimiento,
-        tipoAnimal: petData.selectedTipoAnimal,
-        sexo: petData.selectedSexo,
-        raza: petData.selectedRaza,
-        expediente: petData.expedienteClinico,
-        senasParticulares: petData.senasParticulares,
-        microchip: petData.microchip,
-        petImage: petData.petImage,
-        peso: petData.peso,
-      },
+      petData: petDataFormateada,
     });
   };
+  
 
   return (
     <KeyboardAvoidingView
@@ -101,7 +100,6 @@ export default function MedicalCard() {
           contentContainerStyle={styles.content}
           style={styles.scrollView}
         >
-          {/* Primera sección de dos columnas (Imagen + Datos básicos) */}
           <View style={styles.firstSectionContainer}>
             <View style={styles.imageContainer}>
               <PetImagePicker onImageSelected={handleImageSelected} />
@@ -112,44 +110,71 @@ export default function MedicalCard() {
                   resizeMode="cover"
                 />
               )}
+              {errors.petImage && (
+                <Text style={styles.errorText}>{errors.petImage}</Text>
+              )}
             </View>
             <View style={styles.dataContainer}>
               <Text style={styles.text}>Nombre</Text>
               <InputText
-                style={styles.input}
+                style={[
+                  styles.input,
+                  errors.nombre && { borderColor: "red" },
+                ]}
                 placeholder="Hugo Montaño"
                 value={petData.nombre}
-                keyboardType="default"
-                onChangeText={(text) =>
-                  setPetData({ ...petData, nombre: text })
-                }
+                onChangeText={(text) => {
+                  setPetData({ ...petData, nombre: text });
+                  if (errors.nombre) setErrors({ ...errors, nombre: null });
+                }}
               />
+              {errors.nombre && (
+                <Text style={styles.errorText}>{errors.nombre}</Text>
+              )}
+
               <Text style={styles.text}>Fecha de Nacimiento</Text>
               <InputText
-                style={styles.input}
+                style={[
+                  styles.input,
+                  errors.fechaNacimiento && { borderColor: "red" },
+                ]}
                 placeholder="DD/MM/AAAA"
                 value={petData.fechaNacimiento}
-                onChangeText={(text) =>
-                  setPetData({ ...petData, fechaNacimiento: text })
-                }
+                onChangeText={(text) => {
+                  setPetData({ ...petData, fechaNacimiento: text });
+                  if (errors.fechaNacimiento)
+                    setErrors({ ...errors, fechaNacimiento: null });
+                }}
               />
+              {errors.fechaNacimiento && (
+                <Text style={styles.errorText}>{errors.fechaNacimiento}</Text>
+              )}
             </View>
           </View>
-          {/* Segunda sección de dos columnas (Tipo de animal + Sexo) */}
+
           <View style={styles.secondSectionContainer}>
-            <Text style={styles.text}>Num. de expediente clinio</Text>
+            <Text style={styles.text}>Num. de expediente clínico</Text>
             <InputText
-              style={styles.input}
+              style={[
+                styles.input,
+                errors.expedienteClinico && { borderColor: "red" },
+              ]}
               placeholder="2025-04-12345"
               value={petData.expedienteClinico}
-              keyboardType="numeric"
-              onChangeText={(text) =>
+              onChangeText={(text) => {
                 setPetData({
                   ...petData,
-                  expedienteClinico: formatExpedient(text),
-                })
-              }
+                  expedienteClinico: text, // sin formato en tiempo real
+                });
+                if (errors.expedienteClinico) {
+                  setErrors({ ...errors, expedienteClinico: null });
+                }
+              }}
             />
+            {errors.expedienteClinico && (
+              <Text style={styles.errorText}>{errors.expedienteClinico}</Text>
+            )}
+
             <View style={styles.row}>
               <View style={styles.column}>
                 <Text style={styles.text}>Tipo de animal</Text>
@@ -157,14 +182,21 @@ export default function MedicalCard() {
                   items={TipoAnimal}
                   value={petData.selectedTipoAnimal}
                   placeholder="Selecciona tipo"
-                  onSelect={(item) =>
-                    setPetData({
-                      ...petData,
-                      selectedTipoAnimal: item.value,
-                    })
-                  }
-                  style={styles.dropdown}
+                  onSelect={(item) => {
+                    setPetData({ ...petData, selectedTipoAnimal: item.value });
+                    if (errors.selectedTipoAnimal)
+                      setErrors({ ...errors, selectedTipoAnimal: null });
+                  }}
+                  style={[
+                    styles.dropdown,
+                    errors.selectedTipoAnimal && { borderColor: "red" },
+                  ]}
                 />
+                {errors.selectedTipoAnimal && (
+                  <Text style={styles.errorText}>
+                    {errors.selectedTipoAnimal}
+                  </Text>
+                )}
 
                 <Text style={styles.text}>Raza</Text>
                 <CustomDropdown
@@ -174,56 +206,99 @@ export default function MedicalCard() {
                       : RazasGatos
                   }
                   value={petData.selectedRaza}
-                  placeholder="Selecciona tipo"
-                  onSelect={(text) =>
-                    setPetData({ ...petData, selectedRaza: text })
-                  }
-                  style={styles.dropdown}
+                  placeholder="Selecciona raza"
+                  onSelect={(text) => {
+                    setPetData({ ...petData, selectedRaza: text });
+                    if (errors.selectedRaza)
+                      setErrors({ ...errors, selectedRaza: null });
+                  }}
+                  style={[
+                    styles.dropdown,
+                    errors.selectedRaza && { borderColor: "red" },
+                  ]}
                 />
+                {errors.selectedRaza && (
+                  <Text style={styles.errorText}>{errors.selectedRaza}</Text>
+                )}
               </View>
+
               <View style={styles.column}>
                 <Text style={styles.text}>Sexo</Text>
                 <CustomDropdown
                   items={Sexos}
                   value={petData.selectedSexo}
-                  placeholder="Selecciona tipo"
-                  onSelect={(text) =>
-                    setPetData({ ...petData, selectedSexo: text })
-                  }
-                  style={styles.dropdown}
+                  placeholder="Selecciona sexo"
+                  onSelect={(text) => {
+                    setPetData({ ...petData, selectedSexo: text });
+                    if (errors.selectedSexo)
+                      setErrors({ ...errors, selectedSexo: null });
+                  }}
+                  style={[
+                    styles.dropdown,
+                    errors.selectedSexo && { borderColor: "red" },
+                  ]}
                 />
+                {errors.selectedSexo && (
+                  <Text style={styles.errorText}>{errors.selectedSexo}</Text>
+                )}
 
                 <Text style={styles.text}>Peso</Text>
                 <InputText
-                  style={styles.input}
+                  style={[
+                    styles.input,
+                    errors.peso && { borderColor: "red" },
+                  ]}
                   placeholder="20 kg"
-                  keyboardType="numeric"
                   value={petData.peso}
-                  onChangeText={(text) =>
-                    setPetData({ ...petData, peso: text })
-                  }
+                  keyboardType="numeric"
+                  onChangeText={(text) => {
+                    setPetData({ ...petData, peso: text });
+                    if (errors.peso) setErrors({ ...errors, peso: null });
+                  }}
                 />
+                {errors.peso && (
+                  <Text style={styles.errorText}>{errors.peso}</Text>
+                )}
               </View>
             </View>
+
             <Text style={styles.text}>Señas particulares</Text>
             <InputText
-              style={styles.input}
+              style={[
+                styles.input,
+                errors.senasParticulares && { borderColor: "red" },
+              ]}
               placeholder="Es blanquito con manchas negras"
               value={petData.senasParticulares}
-              onChangeText={(text) =>
-                setPetData({ ...petData, senasParticulares: text })
-              }
+              onChangeText={(text) => {
+                setPetData({ ...petData, senasParticulares: text });
+                if (errors.senasParticulares)
+                  setErrors({ ...errors, senasParticulares: null });
+              }}
             />
+            {errors.senasParticulares && (
+              <Text style={styles.errorText}>{errors.senasParticulares}</Text>
+            )}
+
             <Text style={styles.text}>Microchip</Text>
             <InputText
-              style={styles.input}
+              style={[
+                styles.input,
+                errors.microchip && { borderColor: "red" },
+              ]}
               placeholder="ID 2419401310302"
-              keyboardType="numeric"
               value={petData.microchip}
-              onChangeText={(text) =>
-                setPetData({ ...petData, microchip: text })
-              }
+              keyboardType="numeric"
+              onChangeText={(text) => {
+                setPetData({ ...petData, microchip: text });
+                if (errors.microchip)
+                  setErrors({ ...errors, microchip: null });
+              }}
             />
+            {errors.microchip && (
+              <Text style={styles.errorText}>{errors.microchip}</Text>
+            )}
+
             <TouchableOpacity
               style={styles.continueButton}
               onPress={handleContinue}

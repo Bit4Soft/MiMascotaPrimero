@@ -67,4 +67,11 @@ export default StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
   },
+  errorInput: {
+    borderColor: 'red', // Borde rojo en caso de error
+  },
+  errorText: {
+    color: 'red',
+    marginBottom: 8,
+  },
 });

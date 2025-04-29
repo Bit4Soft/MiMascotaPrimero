@@ -52,4 +52,14 @@ export default StyleSheet.create({
     justifyContent: "space-between",
     gap: 10,
   },
+  inputError: {
+    borderColor: 'red',
+    borderWidth: 1,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginBottom: 5,
+  },
+  
 });
