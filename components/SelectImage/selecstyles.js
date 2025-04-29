@@ -1,43 +1,40 @@
 import { StyleSheet } from "react-native";
+import theme from "../../constants/theme";
 
 export default StyleSheet.create({
-    container: {
-      position: 'absolute',  // Posicionamiento absoluto
-      top: 5,               // 10px desde el borde superior
-      left: 5,              // 10px desde el borde izquierdo
-      zIndex: 1, 
-    },
-
-    imageContainer: {
-      width: 150,
-      height: 150,
-      borderRadius: 10,
-      overflow: 'hidden',
-      backgroundColor: '#fff',
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderWidth: 4,
-      resizeMode: 'contain',
-      borderStyle: 'dotted',
-      borderColor: 'black',
-    },
-    image: {
-    width: '100%',
-    height: '100%',
-    },
-    placeholder: {
-      alignItems: 'center',
-      padding: 20,
-    },
-    defaultImage: {
-      width: 100,
-      height: 100,
-      marginBottom: 10,
-      opacity: 0.6,
-      resizeMode: 'contain',
-    },
-    placeholderText: {
-      color: '#666',
-      textAlign: 'center',
-    },
-  });
+  imageContainer: {
+    width: 150,
+    height: 155,
+    borderRadius: 10,
+    overflow: "hidden",
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 2,
+    resizeMode: "contain",
+    borderStyle: "dotted",
+    borderColor: "black",
+  },
+  image: {
+    width: "100%",
+    height: "100%",
+  },
+  placeholder: {
+    alignItems: "center",
+    padding: 20,
+  },
+  defaultImage: {
+    marginTop: 20,
+    width: 50,
+    height: 50,
+    marginBottom: 10,
+    opacity: 0.7,
+    resizeMode: "contain",
+  },
+  placeholderText: {
+    marginTop: 10,
+    color: "#666",
+    textAlign: "center",
+    fontSize: theme.fontSize.small,
+  },
+});

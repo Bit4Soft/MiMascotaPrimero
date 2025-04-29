@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import theme from "../../constants/theme";
 
 export default StyleSheet.create({
   safeArea: {
@@ -15,72 +16,55 @@ export default StyleSheet.create({
     padding: 16,
   },
   text: {
-    fontSize: 24,
-    fontWeight: "bold",
+    fontSize: theme.fontSize.regular,
+    fontFamily: theme.fontFamily,
+    fontWeight: "regular",
     color: "#000000",
-    marginBottom: 20,
-    textAlign: 'center',
+    textAlign: "start",
   },
-  // Contenedores
-  twoColumnContainer: {
-    flexDirection: 'row',
-    marginBottom: 5,
+
+  firstSectionContainer: {
+    flexDirection: "row",
+    alignItems: "center",
   },
-  fullWidthContainer: {
-    marginBottom: 15,
+  imageContainer: {
+    alignContent: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
   },
-  // Columnas
+  dataContainer: {
+    paddingLeft: 10,
+    flex: 1,
+  },
+
+  secondSectionContainer: {
+    marginTop: 20,
+  },
+
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 10,
+  },
+
   column: {
     flex: 1,
-    maxWidth: '50%',
   },
-  columnSpacer: {
-    width: 13,
-  },
-  // Formularios
-  formContainer: {
-    paddingLeft: 0, // Ajustado para mejor alineación
-  },
-  inputContainer: {
-    marginBottom: 0,
-  },
-  label: {
-    fontSize: 16,
-    color: "#1D2951",
-    marginBottom: 5,
-    fontWeight: '500',
-  },
-  input: {
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#245e4b',
-    borderRadius: 8,
-    padding: 12,
-    width: '100%',
-  },
-  dropdown: {
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#245e4b',
-    borderRadius: 8,
-  },
-  multilineInput: {
-    minHeight: 50,
-    textAlignVertical: 'top',
-  },
+
   continueButton: {
     backgroundColor: "#245e4b",
     padding: 15,
-    borderRadius: 8,
-    alignItems: 'center',
+    borderRadius: 16,
+    alignItems: "center",
     marginTop: 20,
     marginBottom: 30,
     borderWidth: 1,
-    borderColor: '#fff',
+    borderColor: "#fff",
   },
   continueButtonText: {
-    color: 'white',
+    color: "white",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });
