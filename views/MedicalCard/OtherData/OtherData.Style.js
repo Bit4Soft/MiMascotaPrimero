@@ -61,5 +61,14 @@ export default StyleSheet.create({
     fontSize: 12,
     marginBottom: 5,
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    fontSize: 16,
+    color: '#000',
+  },
   
 });
