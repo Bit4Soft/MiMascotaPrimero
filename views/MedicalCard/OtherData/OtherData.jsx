@@ -115,7 +115,11 @@ export default function DatosAdicionales({ route }) {
         createdAt: serverTimestamp(),
       });
 
-      navigation.navigate("Cartilla");
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "Sucess" }],
+      });
+      
     } catch (error) {
       console.error("Error completo:", error);
       Alert.alert("Error", "No se pudo guardar: " + error.message);
@@ -128,7 +132,7 @@ export default function DatosAdicionales({ route }) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#0000ff" />
-        <Text>Guardando datos...</Text>
+        <Text style={styles.loadingText}>Guardando datos...</Text>
       </View>
     );
   }

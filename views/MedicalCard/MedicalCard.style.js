@@ -74,4 +74,18 @@ export default StyleSheet.create({
     color: 'red',
     marginBottom: 8,
   },
+  dateButton: {
+    backgroundColor: '#fff', 
+    paddingVertical: 14,
+    alignItems: 'center',
+    borderRadius: 8,
+    marginBottom: 20,
+    elevation: 1,
+  },
+
+  dateButtonText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#2C3E50',
+  },
 });

@@ -13,6 +13,7 @@ import {
 import Header from "../../components/Layouts/Header";
 import styles from "./MedicalCard.style";
 import InputText from "../../components/InputText/InputText";
+import DateTimePicker from '@react-native-community/datetimepicker';
 import PetImagePicker from "../../components/SelectImage/SelectImage";
 import { StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -29,10 +30,11 @@ import { formatExpedient } from "../../utils/formatExpedient";
 export default function MedicalCard() {
   const navigation = useNavigation();
   const [petImage, setPetImage] = useState(null);
-
+  const [date, setDate] = useState(new Date());
+  const [show, setShow] = useState(false);
   const [petData, setPetData] = useState({
     nombre: "",
-    fechaNacimiento: "",
+    LFechap: date.toLocaleDateString([], { dateStyle: 'medium' }),
     selectedTipoAnimal: null,
     selectedSexo: null,
     selectedRaza: null,
@@ -79,6 +81,16 @@ export default function MedicalCard() {
     navigation.navigate("Othersdata", {
       petData: petDataFormateada,
     });
+  };
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(false);
+    setDate(currentDate);
+  };
+
+  const showDataPicker = () => {
+    setShow(true);
   };
   
 
@@ -131,24 +143,19 @@ export default function MedicalCard() {
               {errors.nombre && (
                 <Text style={styles.errorText}>{errors.nombre}</Text>
               )}
-
               <Text style={styles.text}>Fecha de Nacimiento</Text>
-              <InputText
-                style={[
-                  styles.input,
-                  errors.fechaNacimiento && { borderColor: "red" },
-                ]}
-                placeholder="DD/MM/AAAA"
-                value={petData.fechaNacimiento}
-                onChangeText={(text) => {
-                  setPetData({ ...petData, fechaNacimiento: text });
-                  if (errors.fechaNacimiento)
-                    setErrors({ ...errors, fechaNacimiento: null });
-                }}
-              />
-              {errors.fechaNacimiento && (
-                <Text style={styles.errorText}>{errors.fechaNacimiento}</Text>
-              )}
+                <TouchableOpacity style={styles.dateButton} onPress={showDataPicker}>
+                          <Text style={styles.dateButtonText}>{date.toLocaleDateString()}</Text>
+                        </TouchableOpacity>
+                        {show && (
+                          <DateTimePicker
+                            value={date}
+                            mode="date"
+                            is24Hour={true}
+                            display="default"
+                            onChange={onChange}
+                          />
+                        )}
             </View>
           </View>
 
@@ -207,8 +214,8 @@ export default function MedicalCard() {
                   }
                   value={petData.selectedRaza}
                   placeholder="Selecciona raza"
-                  onSelect={(text) => {
-                    setPetData({ ...petData, selectedRaza: text });
+                  onSelect={(item) => {
+                    setPetData({ ...petData, selectedRaza: item.value });
                     if (errors.selectedRaza)
                       setErrors({ ...errors, selectedRaza: null });
                   }}
@@ -228,8 +235,8 @@ export default function MedicalCard() {
                   items={Sexos}
                   value={petData.selectedSexo}
                   placeholder="Selecciona sexo"
-                  onSelect={(text) => {
-                    setPetData({ ...petData, selectedSexo: text });
+                  onSelect={(item) => {
+                    setPetData({ ...petData, selectedSexo: item.value });
                     if (errors.selectedSexo)
                       setErrors({ ...errors, selectedSexo: null });
                   }}
