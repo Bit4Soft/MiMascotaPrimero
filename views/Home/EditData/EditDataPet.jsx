@@ -53,7 +53,7 @@ export default function EditDataPet() {
     expedienteClinico: "",
     senasParticulares: "",
     microchip: "",
-    petImage: petImage,
+    imageUrl: petImage,
     peso: "",
   });
 
@@ -64,7 +64,7 @@ export default function EditDataPet() {
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           const data = docSnap.data();
-          setPetImage(data.petImage || null);
+          setPetImage(data.imageUrl || null);
           setDate(new Date(data.LFechap));
           setPetData({
             nombre: data.nombre,
@@ -122,7 +122,7 @@ export default function EditDataPet() {
       peso: petData.peso,
       senasParticulares: petData.senasParticulares,
       microchip: petData.microchip,
-      petImage: imageUrl,
+      imageUrl: imageUrl,
     };
 
     try {
