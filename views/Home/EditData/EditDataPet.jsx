@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 
@@ -25,8 +26,11 @@ import { useNavigation } from "@react-navigation/native";
 
 export default function EditDataPet() {
   const navigation = useNavigation();
+
   const [petImage, setPetImage] = useState(null);
   const [date, setDate] = useState(new Date());
+  const [isLoading, setIsLoading] = useState(false);
+
   const route = useRoute();
   const { petId } = route.params;
 
@@ -34,7 +38,7 @@ export default function EditDataPet() {
     try {
       const response = await fetch(uri);
       const blob = await response.blob();
-      const storageRef = ref(storage, `pets/${petId}.jpg`);
+      const storageRef = ref(storage, `mascotas/${petId}.jpg`);
       await uploadBytes(storageRef, blob);
       const downloadURL = await getDownloadURL(storageRef);
       return downloadURL;
@@ -91,7 +95,6 @@ export default function EditDataPet() {
 
   const handleImageSelected = (uri) => {
     setPetImage(uri);
-    setPetData({ ...petData, petImage: uri });
     if (errors.petImage) {
       setErrors({ ...errors, petImage: null });
     }
@@ -109,12 +112,14 @@ export default function EditDataPet() {
   };
   const handleEditar = async () => {
     if (!validarCampos()) return;
-
+    setIsLoading(true);
     let imageUrl = petData.petImage;
 
-    if (petImage && petImage !== petData.petImage) {
+    if (petImage && petImage.startsWith("file://")) {
       const uploadedUrl = await uploadImageAsync(petImage, petId);
-      if (uploadedUrl) imageUrl = uploadedUrl;
+      if (uploadedUrl) {
+        imageUrl = uploadedUrl;
+      }
     }
 
     const petDataActualizada = {
@@ -132,6 +137,8 @@ export default function EditDataPet() {
     } catch (error) {
       console.error("Error al actualizar:", error);
       Alert.alert("Error", "No se pudieron actualizar los datos");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -289,11 +296,22 @@ export default function EditDataPet() {
               <Text style={styles.errorText}>{errors.microchip}</Text>
             )}
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={styles.continueButton}
               onPress={handleEditar}
             >
               <Text style={styles.continueButtonText}>Actualizar</Text>
+            </TouchableOpacity> */}
+            <TouchableOpacity
+              style={styles.continueButton}
+              onPress={handleEditar}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text style={styles.continueButtonText}>Actualizar</Text>
+              )}
             </TouchableOpacity>
           </View>
         </ScrollView>
