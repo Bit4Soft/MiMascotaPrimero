@@ -9,14 +9,14 @@ import {
   Platform,
 } from "react-native";
 import styles from "./OtherData.Style";
-import Header from "../../../components/Layouts/Header";
+import Header from "../../../../components/Layouts/Header";
 import { useNavigation } from "@react-navigation/native";
-import InputText from "../../../components/InputText/InputText";
-import { db, storage } from "../../../database/firebase";
+import InputText from "../../../../components/InputText/InputText";
+import { db, storage } from "../../../../database/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { ActivityIndicator } from "react-native-paper";
-import { formatPhoneNumber } from "../../../utils/formatPhoneNumber";
+import { formatPhoneNumber } from "../../../../utils/formatPhoneNumber";
 
 export default function DatosAdicionales({ route }) {
   const navigation = useNavigation();
@@ -119,7 +119,6 @@ export default function DatosAdicionales({ route }) {
         index: 0,
         routes: [{ name: "Sucess" }],
       });
-      
     } catch (error) {
       console.error("Error completo:", error);
       Alert.alert("Error", "No se pudo guardar: " + error.message);
@@ -147,7 +146,7 @@ export default function DatosAdicionales({ route }) {
           <Header
             title="Datos Adicionales"
             showBackButton={true}
-            icon={require("../../../assets/icons/arrow-return.png")}
+            icon={require("../../../../assets/icons/arrow-return.png")}
           />
         </View>
 
@@ -157,59 +156,83 @@ export default function DatosAdicionales({ route }) {
               <Text style={styles.sectionTitle}>Datos del dueño</Text>
               <Text style={styles.text}>Nombre</Text>
               <InputText
-                style={[styles.input, errors.user_nombre && { borderColor: "red" }]}
+                style={[
+                  styles.input,
+                  errors.user_nombre && { borderColor: "red" },
+                ]}
                 placeholder="Hugo Montaño"
                 value={userData.nombre}
                 onChangeText={(text) => {
                   setUserData({ ...userData, nombre: text });
-                  if (errors.user_nombre) setErrors((e) => ({ ...e, user_nombre: null }));
+                  if (errors.user_nombre)
+                    setErrors((e) => ({ ...e, user_nombre: null }));
                 }}
               />
-              {errors.user_nombre && <Text style={styles.errorText}>{errors.user_nombre}</Text>}
+              {errors.user_nombre && (
+                <Text style={styles.errorText}>{errors.user_nombre}</Text>
+              )}
 
               <Text style={styles.text}>Direccion</Text>
               <InputText
-                style={[styles.input, errors.user_direccion&& { borderColor: "red" }]}
+                style={[
+                  styles.input,
+                  errors.user_direccion && { borderColor: "red" },
+                ]}
                 placeholder="Calle 123"
                 value={userData.direccion}
-                onChangeText={(text) =>{
-
+                onChangeText={(text) => {
                   setUserData({ ...userData, direccion: text });
-                  if (errors.user_direccion) setErrors((e) => ({ ...e, user_direccion: null }));
+                  if (errors.user_direccion)
+                    setErrors((e) => ({ ...e, user_direccion: null }));
                 }}
               />
-               {errors.user_direccion && <Text style={styles.errorText}>{errors.user_direccion}</Text>}
+              {errors.user_direccion && (
+                <Text style={styles.errorText}>{errors.user_direccion}</Text>
+              )}
 
               <View style={styles.row}>
                 <View style={styles.column}>
                   <Text style={styles.text}>Telefono</Text>
                   <InputText
-                    style={[styles.input, errors.user_telefono && { borderColor: "red" }]}
+                    style={[
+                      styles.input,
+                      errors.user_telefono && { borderColor: "red" },
+                    ]}
                     placeholder="322-157-59-92"
                     keyboardType="numeric"
                     value={userData.telefono}
                     onChangeText={(text) => {
-                      setUserData({ ...userData, telefono: formatPhoneNumber(text) });
-                      if (errors.user_telefono) setErrors((e) => ({ ...e, user_telefono: null }));
+                      setUserData({
+                        ...userData,
+                        telefono: formatPhoneNumber(text),
+                      });
+                      if (errors.user_telefono)
+                        setErrors((e) => ({ ...e, user_telefono: null }));
                     }}
                   />
-                  {errors.user_telefono && <Text style={styles.errorText}>{errors.user_telefono}</Text>}
+                  {errors.user_telefono && (
+                    <Text style={styles.errorText}>{errors.user_telefono}</Text>
+                  )}
                 </View>
                 <View style={styles.column}>
                   <Text style={styles.text}>Email</Text>
                   <InputText
-                    style={[styles.input, errors.user_email && { borderColor: "red" }]}
+                    style={[
+                      styles.input,
+                      errors.user_email && { borderColor: "red" },
+                    ]}
                     placeholder="pet@gmail.com"
                     keyboardType="email-address"
                     value={userData.email}
                     onChangeText={(text) => {
-
                       setUserData({ ...userData, email: text });
-                      if (errors.user_email) setErrors((e) => ({ ...e, user_email: null }));
+                      if (errors.user_email)
+                        setErrors((e) => ({ ...e, user_email: null }));
                     }}
                   />
-               {errors.user_email && <Text style={styles.errorText}>{errors.user_email}</Text>}
-
+                  {errors.user_email && (
+                    <Text style={styles.errorText}>{errors.user_email}</Text>
+                  )}
                 </View>
               </View>
             </View>
@@ -218,94 +241,141 @@ export default function DatosAdicionales({ route }) {
               <Text style={styles.sectionTitle}>Datos de la clinica</Text>
               <Text style={styles.text}>Nombre de la clinica</Text>
               <InputText
-                style={[styles.input, errors.clinica_nombre && { borderColor: "red" }]}
+                style={[
+                  styles.input,
+                  errors.clinica_nombre && { borderColor: "red" },
+                ]}
                 placeholder="Event Pet"
                 value={clinicaData.nombreClinica}
                 onChangeText={(text) => {
                   setClinicaData({ ...clinicaData, nombreClinica: text });
-                  if (errors.clinica_nombre) setErrors((e) => ({ ...e, clinica_nombre: null }));
+                  if (errors.clinica_nombre)
+                    setErrors((e) => ({ ...e, clinica_nombre: null }));
                 }}
               />
-              {errors.clinica_nombre && <Text style={styles.errorText}>{errors.clinica_nombre}</Text>}
+              {errors.clinica_nombre && (
+                <Text style={styles.errorText}>{errors.clinica_nombre}</Text>
+              )}
 
               <Text style={styles.text}>Direccion</Text>
               <InputText
-                style={[styles.input, errors.clinica_direccion && { borderColor: "red" }]}
+                style={[
+                  styles.input,
+                  errors.clinica_direccion && { borderColor: "red" },
+                ]}
                 placeholder="Calle 123"
                 value={clinicaData.direccion}
-                onChangeText={(text) =>{
-
+                onChangeText={(text) => {
                   setClinicaData({ ...clinicaData, direccion: text });
-                  if (errors.clinica_direccion) setErrors((e) => ({ ...e, clinica_direccion: null }));
-                } }
+                  if (errors.clinica_direccion)
+                    setErrors((e) => ({ ...e, clinica_direccion: null }));
+                }}
               />
-                  {errors.clinica_direccion && <Text style={styles.errorText}>{errors.clinica_direccion}</Text>}
-
+              {errors.clinica_direccion && (
+                <Text style={styles.errorText}>{errors.clinica_direccion}</Text>
+              )}
 
               <Text style={styles.text}>Nombre del veterinario</Text>
               <InputText
-                style={[styles.input, errors.veterinario_nombre && { borderColor: "red" }]}
+                style={[
+                  styles.input,
+                  errors.veterinario_nombre && { borderColor: "red" },
+                ]}
                 placeholder="Saul Hernandez"
                 value={clinicaData.veterinarios[0].nombreVete}
                 onChangeText={(text) => {
-                  const updatedVets = [{ ...clinicaData.veterinarios[0], nombreVete: text }];
+                  const updatedVets = [
+                    { ...clinicaData.veterinarios[0], nombreVete: text },
+                  ];
                   setClinicaData({ ...clinicaData, veterinarios: updatedVets });
-                  if (errors.veterinario_nombre) setErrors((e) => ({ ...e, veterinario_nombre: null }));
+                  if (errors.veterinario_nombre)
+                    setErrors((e) => ({ ...e, veterinario_nombre: null }));
                 }}
               />
-              {errors.veterinario_nombre && <Text style={styles.errorText}>{errors.veterinario_nombre}</Text>}
+              {errors.veterinario_nombre && (
+                <Text style={styles.errorText}>
+                  {errors.veterinario_nombre}
+                </Text>
+              )}
 
               <Text style={styles.text}>Num. de cedula</Text>
               <InputText
-                style={[styles.input, errors.veterinario_cedula && { borderColor: "red" }]}
+                style={[
+                  styles.input,
+                  errors.veterinario_cedula && { borderColor: "red" },
+                ]}
                 placeholder="1234567"
                 keyboardType="numeric"
                 value={clinicaData.veterinarios[0].cedula}
                 onChangeText={(text) => {
-                  const updatedVets = [{ ...clinicaData.veterinarios[0], cedula: text }];
+                  const updatedVets = [
+                    { ...clinicaData.veterinarios[0], cedula: text },
+                  ];
                   setClinicaData({ ...clinicaData, veterinarios: updatedVets });
-                  if (errors.veterinario_cedula) setErrors((e) => ({ ...e, veterinario_cedula: null }));
+                  if (errors.veterinario_cedula)
+                    setErrors((e) => ({ ...e, veterinario_cedula: null }));
                 }}
               />
-              {errors.veterinario_cedula && <Text style={styles.errorText}>{errors.veterinario_cedula}</Text>}
+              {errors.veterinario_cedula && (
+                <Text style={styles.errorText}>
+                  {errors.veterinario_cedula}
+                </Text>
+              )}
 
               <View style={styles.row}>
                 <View style={styles.column}>
                   <Text style={styles.text}>Telefono</Text>
                   <InputText
-                    style={[styles.input, errors.clinica_telefono && { borderColor: "red" }]}
+                    style={[
+                      styles.input,
+                      errors.clinica_telefono && { borderColor: "red" },
+                    ]}
                     placeholder="322-157-59-92"
                     keyboardType="numeric"
                     value={clinicaData.telefono}
-                    onChangeText={(text) =>{
-                      setClinicaData({ ...clinicaData, telefono: formatPhoneNumber(text) })
-                      if (errors.clinica_telefono) setErrors((e) => ({ ...e, clinica_telefono: null }));}
-                      
-                    } 
+                    onChangeText={(text) => {
+                      setClinicaData({
+                        ...clinicaData,
+                        telefono: formatPhoneNumber(text),
+                      });
+                      if (errors.clinica_telefono)
+                        setErrors((e) => ({ ...e, clinica_telefono: null }));
+                    }}
                   />
-                  {errors.clinica_telefono && <Text style={styles.errorText}>{errors.clinica_telefono}</Text>}
+                  {errors.clinica_telefono && (
+                    <Text style={styles.errorText}>
+                      {errors.clinica_telefono}
+                    </Text>
+                  )}
                 </View>
                 <View style={styles.column}>
                   <Text style={styles.text}>Email</Text>
                   <InputText
-                    style={[styles.input, errors.clinica_email && { borderColor: "red" }]}
+                    style={[
+                      styles.input,
+                      errors.clinica_email && { borderColor: "red" },
+                    ]}
                     placeholder="pet@gmail.com"
                     keyboardType="email-address"
                     value={clinicaData.email}
                     onChangeText={(text) => {
-                      setClinicaData({ ...clinicaData, email: text })
-                      if (errors.clinica_email) setErrors((e) => ({ ...e, clinica_email: null }));
+                      setClinicaData({ ...clinicaData, email: text });
+                      if (errors.clinica_email)
+                        setErrors((e) => ({ ...e, clinica_email: null }));
                     }}
-
                   />
-                  {errors.clinica_email && <Text style={styles.errorText}>{errors.clinica_email}</Text>}
-
+                  {errors.clinica_email && (
+                    <Text style={styles.errorText}>{errors.clinica_email}</Text>
+                  )}
                 </View>
               </View>
             </View>
           </View>
 
-          <TouchableOpacity style={styles.continueButton} onPress={handleFinalizar}>
+          <TouchableOpacity
+            style={styles.continueButton}
+            onPress={handleFinalizar}
+          >
             <Text style={styles.continueButtonText}>Finalizar Registro</Text>
           </TouchableOpacity>
         </ScrollView>

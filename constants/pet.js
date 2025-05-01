@@ -1,21 +1,21 @@
 export const TipoAnimal = [
-  { label: "Perro", value: "perro" },
-  { label: "Gato", value: "gato" },
+  { label: "Perro", value: "Perro" },
+  { label: "Gato", value: "Gato" },
 ];
 
 export const Sexos = [
-  { label: "Macho", value: "macho" },
-  { label: "Hembra", value: "hembra" },
+  { label: "Macho", value: "Macho" },
+  { label: "Hembra", value: "Hembra" },
 ];
 
 export const RazasPerros = [
-  { label: "Labrador", value: "labrador" },
-  { label: "Bulldog", value: "bulldog" },
-  { label: "Golden Retriever", value: "golden" },
+  { label: "Labrador", value: "Labrador" },
+  { label: "Bulldog", value: "Bulldog" },
+  { label: "Golden Retriever", value: "Golden" },
 ];
 
 export const RazasGatos = [
-  { label: "Siamés", value: "siames" },
-  { label: "Bengalí", value: "bengali" },
-  { label: "Maine", value: "maine" },
+  { label: "Siamés", value: "Siames" },
+  { label: "Bengalí", value: "Bengali" },
+  { label: "Maine", value: "Maine" },
 ];

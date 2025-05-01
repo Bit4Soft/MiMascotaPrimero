@@ -21,12 +21,11 @@ export default StyleSheet.create({
     elevation: 5,
   },
   itemImage: {
-    paddingTop: 16,
-    width: "100%",
-    height: 250,
+    width: 200,
+    height: 200,
   },
   textContainer: {
-    padding: 16,
+    padding: 24,
     justifyContent: "space-between",
     flex: 1,
   },
