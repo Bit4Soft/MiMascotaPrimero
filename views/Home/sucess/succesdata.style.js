@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import theme from "../../../constants/theme";
 
 export default StyleSheet.create({
   safeArea: {
@@ -9,7 +10,7 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff4ea",
     padding: 16,
-    justifyContent: "space-between", 
+    justifyContent: "center",
     alignItems: "center",
   },
   centerSection: {
@@ -19,27 +20,29 @@ export default StyleSheet.create({
     width: "100%",
   },
   text: {
-    fontSize: 24,
+    fontSize: theme.fontSize.large,
     fontWeight: "bold",
     color: "#000",
     textAlign: "center",
-    marginTop: -150,
+  },
+  imageContent: {
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 80,
   },
   image: {
-    marginTop: 80,
-    width: 220,
-    height: 220,
+    width: 150,
+    height: 150,
     resizeMode: "contain",
   },
   backButton: {
     backgroundColor: "#245e4b",
-    padding: 15,
+    padding: 16,
     borderRadius: 16,
     alignItems: "center",
-    marginTop: 50,
     borderWidth: 1,
     borderColor: "#fff",
-    width: "50%",
+    width: "100%",
   },
   backButtonText: {
     color: "white",

@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, TouchableOpacity, Image, Text } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import styles from "./selecstyles";
 
-const PetImagePicker = ({ onImageSelected }) => {
+const PetImagePicker = ({ onImageSelected, initialImage }) => {
   const [image, setImage] = useState(null);
 
   const pickImage = async () => {
@@ -25,6 +25,10 @@ const PetImagePicker = ({ onImageSelected }) => {
       onImageSelected(result.assets[0].uri);
     }
   };
+
+  useEffect(() => {
+    if (initialImage) setImage(initialImage);
+  }, [initialImage]);
 
   return (
     <View style={styles.container}>

@@ -41,6 +41,7 @@ export default StyleSheet.create({
     marginTop: 50,
     width: "90%",
     height: 100,
+    borderRadius: 20,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     resizeMode: "contain",

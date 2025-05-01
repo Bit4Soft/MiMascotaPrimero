@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import theme from "../../constants/theme";
+import theme from "../../../constants/theme";
 
 export default StyleSheet.create({
   safeArea: {
@@ -68,16 +68,16 @@ export default StyleSheet.create({
     fontWeight: "bold",
   },
   errorInput: {
-    borderColor: 'red', // Borde rojo en caso de error
+    borderColor: "red",
   },
   errorText: {
-    color: 'red',
+    color: "red",
     marginBottom: 8,
   },
   dateButton: {
-    backgroundColor: '#fff', 
+    backgroundColor: "#fff",
     paddingVertical: 14,
-    alignItems: 'center',
+    alignItems: "center",
     borderRadius: 8,
     marginBottom: 20,
     elevation: 1,
@@ -85,7 +85,7 @@ export default StyleSheet.create({
 
   dateButtonText: {
     fontSize: 14,
-    fontWeight: '500',
-    color: '#2C3E50',
+    fontWeight: "500",
+    color: "#2C3E50",
   },
 });

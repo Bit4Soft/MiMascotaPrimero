@@ -1,10 +1,11 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BottomTabNavigator from "./BottonTapNavigator";
-import MedicalCard from "../views/MedicalCard/MedicalCard";
+import MedicalCard from "../views/Home/MedicalCard/MedicalCard";
 import CareDetailsScreen from "../views/Care/CareDetailsScreen";
-import DatosAdicionales from "../views/MedicalCard/OtherData/OtherData";
-import SucessData from "../views/sucess/sucessdata";
+import DatosAdicionales from "../views/Home/MedicalCard/OtherData/OtherData";
+import SucessData from "../views/Home/sucess/sucessdata";
+import EditDataPet from "../views/Home/EditData/EditDataPet";
 
 const Stack = createNativeStackNavigator();
 export default function MainStackNavigator() {
@@ -15,6 +16,7 @@ export default function MainStackNavigator() {
       <Stack.Screen name="CareDetails" component={CareDetailsScreen} />
       <Stack.Screen name="Othersdata" component={DatosAdicionales} />
       <Stack.Screen name="Sucess" component={SucessData} />
+      <Stack.Screen name="EditDataPet" component={EditDataPet} />
     </Stack.Navigator>
   );
 }

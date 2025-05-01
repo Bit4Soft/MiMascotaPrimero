@@ -51,7 +51,15 @@ export default function SliderItemCare({
 
   return (
     <Animated.View style={[styles.itemContainer, animatedStyle]}>
-      <Image source={image} style={styles.itemImage} resizeMode="contain" />
+      <View
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          paddingTop: 16,
+        }}
+      >
+        <Image source={image} style={styles.itemImage} resizeMode="contain" />
+      </View>
       <View style={styles.textContainer}>
         <Text style={styles.itemTitle} numberOfLines={2}>
           {title}
