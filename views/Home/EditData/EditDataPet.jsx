@@ -75,7 +75,7 @@ export default function EditDataPet() {
             expedienteClinico: data.expedienteClinico,
             senasParticulares: data.senasParticulares,
             microchip: data.microchip,
-            petImage: data.petImage,
+            petImage: data.imageUrl,
             peso: data.peso,
           });
         }
