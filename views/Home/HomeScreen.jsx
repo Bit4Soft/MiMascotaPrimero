@@ -64,7 +64,7 @@ export default function HomeScreen() {
               <Text style={styles.text}>¡Bienvenido!</Text>
               <CardPet
                 nombre={item.nombre}
-                petImage={item.petImage}
+                imageUrl={item.imageUrl}
                 onPress={() =>
                   navigation.navigate("EditDataPet", { petId: item.id })
                 }
