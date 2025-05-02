@@ -94,7 +94,7 @@ export default function MedicalCard() {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <SafeAreaView style={styles.safeArea}>
-        <View style={styles.headerWrapper}>
+        <View >
           <Header
             title="Datos de la Mascota"
             icon={require("../../../assets/icons/arrow-return.png")}

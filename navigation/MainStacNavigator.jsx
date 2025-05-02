@@ -6,7 +6,8 @@ import CareDetailsScreen from "../views/Care/CareDetailsScreen";
 import DatosAdicionales from "../views/Home/MedicalCard/OtherData/OtherData";
 import SucessData from "../views/Home/sucess/sucessdata";
 import EditDataPet from "../views/Home/EditData/EditDataPet";
-import VaccinesGivenScreen from "../views/Vaccines/VaccinesGivenScreen";
+import PeriodicReviews from "../views/Dating/Periodicreviews/PeriodicRevies";
+import NewDate from "../views/Dating/Periodicreviews/Newdate/NewDate";
 
 const Stack = createNativeStackNavigator();
 export default function MainStackNavigator() {
@@ -18,7 +19,8 @@ export default function MainStackNavigator() {
       <Stack.Screen name="Othersdata" component={DatosAdicionales} />
       <Stack.Screen name="Sucess" component={SucessData} />
       <Stack.Screen name="EditDataPet" component={EditDataPet} />
-      <Stack.Screen name="VaccinesGiven" component={VaccinesGivenScreen} />
+      <Stack.Screen name="Revisiones" component={PeriodicReviews} />
+      <Stack.Screen name="NewDate" component={NewDate} />
     </Stack.Navigator>
   );
 }
