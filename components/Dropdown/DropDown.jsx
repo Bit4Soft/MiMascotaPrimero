@@ -1,20 +1,34 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Modal, FlatList } from 'react-native';
-import styles from './Dropdown.style';
+import React, { useState, useEffect } from "react";
+import { View, Text, TouchableOpacity, Modal, FlatList } from "react-native";
+import styles from "./Dropdown.style";
 
-const CustomDropdown = ({ items, value, placeholder = "Selecciona", onSelect }) => {
+const CustomDropdown = ({
+  items,
+  value,
+  placeholder = "Selecciona",
+  onSelect,
+}) => {
   const [visible, setVisible] = useState(false);
   const [selected, setSelected] = useState(value || null);
 
+  useEffect(() => {
+    if (value) {
+      const matchedItem = items.find((item) => item.value === value);
+      if (matchedItem) setSelected(matchedItem);
+    }
+  }, []);
   const handleSelect = (item) => {
     setSelected(item);
-    onSelect(item); // Envía el item seleccionado al padre
+    onSelect(item);
     setVisible(false);
   };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.dropdownButton} onPress={() => setVisible(true)}>
+      <TouchableOpacity
+        style={styles.dropdownButton}
+        onPress={() => setVisible(true)}
+      >
         <Text style={styles.buttonText}>
           {selected ? selected.label : placeholder}
         </Text>
@@ -22,8 +36,8 @@ const CustomDropdown = ({ items, value, placeholder = "Selecciona", onSelect }) 
       </TouchableOpacity>
 
       <Modal visible={visible} transparent animationType="fade">
-        <TouchableOpacity 
-          style={styles.modalOverlay} 
+        <TouchableOpacity
+          style={styles.modalOverlay}
           onPress={() => setVisible(false)}
         >
           <View style={styles.dropdownList}>
@@ -31,8 +45,8 @@ const CustomDropdown = ({ items, value, placeholder = "Selecciona", onSelect }) 
               data={items}
               keyExtractor={(item) => item.value.toString()}
               renderItem={({ item }) => (
-                <TouchableOpacity 
-                  style={styles.item} 
+                <TouchableOpacity
+                  style={styles.item}
                   onPress={() => handleSelect(item)}
                 >
                   <Text>{item.label}</Text>
