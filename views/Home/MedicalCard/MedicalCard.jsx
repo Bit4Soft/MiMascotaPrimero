@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   SafeAreaView,
   Text,
   ScrollView,
   View,
   Image,
-  Alert,
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
@@ -46,10 +45,6 @@ export default function MedicalCard() {
   });
 
   const [errors, setErrors] = useState({});
-
-  useEffect(() => {
-    setPetData((prev) => ({ ...prev, selectedRaza: "" }));
-  }, [petData.selectedTipoAnimal]);
 
   const handleImageSelected = (uri) => {
     setPetImage(uri);
@@ -214,7 +209,7 @@ export default function MedicalCard() {
                 <Text style={styles.text}>Raza</Text>
                 <CustomDropdown
                   items={
-                    petData.selectedTipoAnimal === "perro"
+                    petData.selectedTipoAnimal === "Perro"
                       ? RazasPerros
                       : RazasGatos
                   }

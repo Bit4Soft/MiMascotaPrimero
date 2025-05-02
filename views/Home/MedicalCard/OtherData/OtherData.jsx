@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState } from "react";
 import {
   SafeAreaView,
@@ -107,13 +108,15 @@ export default function DatosAdicionales({ route }) {
         ],
       });
 
-      await addDoc(collection(db, "Mascota"), {
+      const mascotaRef = await addDoc(collection(db, "Mascota"), {
         ...petData,
         imageUrl: imageUrl,
         duenoRef: userRef.id,
         clinicaRef: clinicRef.id,
         createdAt: serverTimestamp(),
       });
+
+      await AsyncStorage.setItem("mascotaId", mascotaRef.id);
 
       navigation.reset({
         index: 0,
@@ -129,10 +132,14 @@ export default function DatosAdicionales({ route }) {
 
   if (isLoading) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#0000ff" />
-        <Text style={styles.loadingText}>Guardando datos...</Text>
-      </View>
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.contentLoading}>
+          <View style={styles.centerContent}>
+            <ActivityIndicator size="large" color="#355E49" />
+            <Text style={styles.textLoading}>Cargando datos...</Text>
+          </View>
+        </View>
+      </SafeAreaView>
     );
   }
 

@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import theme from "../../../../constants/theme";
 
 export default StyleSheet.create({
   safeArea: {
@@ -53,22 +54,40 @@ export default StyleSheet.create({
     gap: 10,
   },
   inputError: {
-    borderColor: 'red',
+    borderColor: "red",
     borderWidth: 1,
   },
   errorText: {
-    color: 'red',
+    color: "red",
     fontSize: 12,
     marginBottom: 5,
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   loadingText: {
     fontSize: 16,
-    color: '#000',
+    color: "#000",
   },
-  
+  centerContent: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  textLoading: {
+    paddingTop: 20,
+    fontSize: theme.fontSize.xLarge,
+    color: "#1D2951",
+  },
+  contentLoading: {
+    flex: 1,
+    width: "100%",
+    backgroundColor: "#fff",
+    padding: 16,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#fff4ea",
+    gap: 1,
+  },
 });
