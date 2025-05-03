@@ -12,9 +12,8 @@ import Header from "../../components/Layouts/Header";
 import styles from "./VaccinesGivenScreen.style";
 import { useRoute } from "@react-navigation/native";
 import { vacunasPerros, vacunasGatos } from "../../constants/vaccinesData";
-import { doc, getDoc, updateDoc, onSnapshot } from "firebase/firestore";
+import { doc, updateDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../../database/firebase";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import CustomDropdown from "../../components/Dropdown/DropDown";
 import VaccineGiven from "../../components/Vaccines/VaccineGiven";
 
@@ -40,8 +39,7 @@ export default function VaccinesGivenScreen() {
     let unsubscribe;
 
     const fetchVacunas = async () => {
-      const id = await AsyncStorage.getItem("mascotaId");
-      const docRef = doc(db, "Mascota", id);
+      const docRef = doc(db, "Mascota", "cartillaPrincipal");
 
       unsubscribe = onSnapshot(docRef, (docSnap) => {
         if (docSnap.exists()) {
@@ -79,8 +77,7 @@ export default function VaccinesGivenScreen() {
 
   const handleGuardarVacuna = async () => {
     if (!selectedVacuna) return;
-    const id = await AsyncStorage.getItem("mascotaId");
-    const docRef = doc(db, "Mascota", id);
+    const docRef = doc(db, "Mascota", "cartillaPrincipal");
 
     const nuevaVacuna = {
       nombreVacuna: selectedVacuna,
@@ -91,28 +88,6 @@ export default function VaccinesGivenScreen() {
     await updateDoc(docRef, {
       vacunas: [...(mascotaData.vacunas || []), nuevaVacuna],
     });
-
-    setLoading(true);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      const data = docSnap.data();
-      setMascotaData(data);
-      const puestas = data.vacunas || [];
-
-      setVacunasPuestas(
-        puestas.filter((v) =>
-          vacunasEtapa.some((ve) => ve.nombre === v.nombreVacuna)
-        )
-      );
-
-      const puestasNombres = puestas.map((v) => v.nombreVacuna);
-      const noPuestas = vacunasEtapa.filter(
-        (v) => !puestasNombres.includes(v.nombre)
-      );
-      setVacunasNoPuestas(noPuestas);
-      setSelectedVacuna(null);
-    }
-    setLoading(false);
   };
 
   if (loading) {
@@ -145,7 +120,7 @@ export default function VaccinesGivenScreen() {
             />
           ))
         ) : (
-          <Text>No hay vacunas puestas</Text>
+          <Text style={styles.textNoData}>No hay vacunas puestas</Text>
         )}
 
         <Text style={styles.titleSection}>Vacunas No Puestas</Text>

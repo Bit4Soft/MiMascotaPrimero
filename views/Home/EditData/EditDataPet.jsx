@@ -295,13 +295,6 @@ export default function EditDataPet() {
             {errors.microchip && (
               <Text style={styles.errorText}>{errors.microchip}</Text>
             )}
-
-            {/* <TouchableOpacity
-              style={styles.continueButton}
-              onPress={handleEditar}
-            >
-              <Text style={styles.continueButtonText}>Actualizar</Text>
-            </TouchableOpacity> */}
             <TouchableOpacity
               style={styles.continueButton}
               onPress={handleEditar}

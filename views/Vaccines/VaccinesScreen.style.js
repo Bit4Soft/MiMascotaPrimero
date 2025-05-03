@@ -59,6 +59,7 @@ export default StyleSheet.create({
     paddingTop: 20,
     fontSize: theme.fontSize.xLarge,
     color: "#1D2951",
+    textAlign: "center",
   },
   contentLoading: {
     flex: 1,
@@ -69,5 +70,28 @@ export default StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#fff4ea",
     gap: 1,
+  },
+
+  centerWrapper: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    backgroundColor: "#fff4ea",
+  },
+
+  fullWidthButton: {
+    backgroundColor: "#355E49",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 16,
+    width: "100%",
+    marginTop: 20,
+    alignItems: "center",
+  },
+  imageDoc: {
+    width: 200,
+    height: 200,
+    marginTop: 20,
   },
 });
