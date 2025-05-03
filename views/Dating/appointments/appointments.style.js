@@ -36,4 +36,18 @@ export default StyleSheet.create({
         fontStyle: "italic",
         color: "#666",
       },
+      emptyText: {
+        fontSize: 18,
+        color: "#111",
+        textAlign: "center",
+        fontWeight: "bold",
+        top: -50,
+        
+      },
+      imagenlogo: {
+        width: 200,
+        height: 200,
+        marginBottom: 300,
+        
+      },
 });

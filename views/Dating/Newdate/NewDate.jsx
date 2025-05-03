@@ -28,7 +28,7 @@ export default function NewDate() {
 
     useEffect(() => {
         if (route.params?.tipo) {
-          console.log("Nuevo tipo recibido:", route.params.tipo);
+         
           setTipo(route.params.tipo);
         }
       }, [route.params?.tipo]);
