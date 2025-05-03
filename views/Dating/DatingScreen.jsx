@@ -24,16 +24,8 @@ export default function DatingScreen() {
             {">"}
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.Button} onPress={() => console.log("Cachorros")}> 
-          <Text style={styles.ButtonText}>
-            Registro de vac. cachorro
-          </Text>
-          <Text styles={styles.ButtonText2}>
-            {">"}
-          </Text>
-        </TouchableOpacity>
 
-        <TouchableOpacity style={styles.Button} onPress={() => console.log("RegistroVac")}> 
+        <TouchableOpacity style={styles.Button} onPress={() => navigation.navigate("RecordVac")}> 
           <Text style={styles.ButtonText}>
             Registro de vacunaciones
           </Text>
@@ -41,7 +33,7 @@ export default function DatingScreen() {
             {">"}
           </Text>
         </TouchableOpacity> 
-               <TouchableOpacity style={styles.Button} onPress={() => console.log("Externa")}> 
+               <TouchableOpacity style={styles.Button} onPress={() => navigation.navigate("ExternalDisap")}> 
           <Text style={styles.ButtonText}>
             Prog. desparacitacion externa  
           </Text>
@@ -49,8 +41,8 @@ export default function DatingScreen() {
             {">"}
           </Text>
         </TouchableOpacity> 
-        
-         <TouchableOpacity style={styles.Button} onPress={() => console.log("Interna")}> 
+
+         <TouchableOpacity style={styles.Button} onPress={() => navigation.navigate("InternalDisap")}> 
           <Text style={styles.ButtonText}>
           Prog. desparacitacion interna 
           </Text>
@@ -63,8 +55,7 @@ export default function DatingScreen() {
               style={styles.image}
               source={require("../../assets/icons/cita.png")}
             />
-          </View>
-                
+          </View>            
       </ScrollView>
     </SafeAreaView>
   );

@@ -8,6 +8,7 @@ export default StyleSheet.create({
         flexGrow: 1,
         backgroundColor: "#f3eddf",
         padding: 16,
+        
     }, 
     textContainer: {
         width: "90%",
@@ -72,19 +73,19 @@ export default StyleSheet.create({
         borderColor: "#ccc",
         borderRadius: 10,
         padding: 10,
-        backgroundColor: "#fff",   // Espaciado consistente
+        backgroundColor: "#fff",   
     },
     
    
     dropdownButton: {
-        width: "90%",
+        width: "100%",
         alignSelf: "center", 
         marginTop: 10,
         borderWidth: 1,
         borderColor: "#ccc",
         borderRadius: 10,
         padding: 10,
-        backgroundColor: "#fff",// Centrado vertical
+        backgroundColor: "#fff",
     },
     
 });
