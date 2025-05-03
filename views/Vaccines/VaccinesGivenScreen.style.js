@@ -52,6 +52,7 @@ export default StyleSheet.create({
   },
 
   titleSection: {
+    paddingTop: 10,
     fontSize: theme.fontSize.large,
     paddingBottom: 10,
   },
@@ -60,5 +61,12 @@ export default StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 20,
+  },
+  textNoData: {
+    fontSize: theme.fontSize.regular,
+    color: "red",
+    fontWeight: "bold",
+    textAlign: "center",
+    padding: 16,
   },
 });

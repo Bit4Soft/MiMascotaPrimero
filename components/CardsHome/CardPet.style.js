@@ -12,7 +12,6 @@ export default StyleSheet.create({
     width: 230,
     height: 220,
     borderRadius: 20,
-    marginBottom: 12,
   },
   name: {
     fontSize: 24,
@@ -28,5 +27,23 @@ export default StyleSheet.create({
   buttonText: {
     color: "#000",
     fontSize: 16,
+  },
+  imageWrapper: {
+    width: "100%",
+    height: 220,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+
+  imageLoader: {
+    position: "absolute",
+    zIndex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    height: "100%",
+    backgroundColor: "#F0F0F0",
+    borderRadius: 20,
   },
 });

@@ -7,6 +7,7 @@ import {
   View,
   TouchableOpacity,
   ActivityIndicator,
+  Image,
 } from "react-native";
 import Header from "../../components/Layouts/Header";
 import styles from "./VaccinesScreen.style";
@@ -73,7 +74,7 @@ export default function VaccinesScreen() {
     ? vacunasPorTipo[selectedStage] || []
     : [];
 
-  if (loading || !tipoAnimal || !selectedStage) {
+  if (loading) {
     return (
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.contentLoading}>
@@ -84,6 +85,36 @@ export default function VaccinesScreen() {
         </View>
       </SafeAreaView>
     );
+  }
+
+  if (!tipoAnimal) {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <StatusBar style={styles.statusBar} />
+        <View style={styles.headerWrapper}>
+          <Header title="Vacunas" />
+        </View>
+        <View style={styles.centerWrapper}>
+          <Text style={styles.textLoading}>
+            No se encontró una cartilla registrada.
+          </Text>
+          <Image
+            source={require("../../assets/icons/nodoc.png")}
+            style={styles.imageDoc}
+          />
+          <TouchableOpacity
+            style={styles.fullWidthButton}
+            onPress={() => navigation.navigate("Cartilla")}
+          >
+            <Text style={styles.continueButtonText}>Crear cartilla</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  if (!selectedStage) {
+    return null;
   }
 
   return (
