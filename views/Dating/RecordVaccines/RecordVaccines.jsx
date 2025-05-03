@@ -18,8 +18,7 @@ import Header from "../../../components/Layouts/Header";
   
     const fetchVacunas = async () => {
       const id = await AsyncStorage.getItem("mascotaId");
-      const docRef = doc(db, "Mascota", id);
-  
+      const docRef = doc(db, "Mascota", "cartillaPrincipal");
       unsubscribe = onSnapshot(docRef, (docSnap) => {
         if (docSnap.exists()) {
           const data = docSnap.data();
