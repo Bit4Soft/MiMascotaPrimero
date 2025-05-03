@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState } from "react";
 import {
   SafeAreaView,
@@ -14,7 +13,13 @@ import Header from "../../../../components/Layouts/Header";
 import { useNavigation } from "@react-navigation/native";
 import InputText from "../../../../components/InputText/InputText";
 import { db, storage } from "../../../../database/firebase";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+  setDoc,
+  doc,
+} from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { ActivityIndicator } from "react-native-paper";
 import { formatPhoneNumber } from "../../../../utils/formatPhoneNumber";
@@ -108,15 +113,13 @@ export default function DatosAdicionales({ route }) {
         ],
       });
 
-      const mascotaRef = await addDoc(collection(db, "Mascota"), {
+      await setDoc(doc(db, "Mascota", "cartillaPrincipal"), {
         ...petData,
         imageUrl: imageUrl,
         duenoRef: userRef.id,
         clinicaRef: clinicRef.id,
         createdAt: serverTimestamp(),
       });
-
-      await AsyncStorage.setItem("mascotaId", mascotaRef.id);
 
       navigation.reset({
         index: 0,

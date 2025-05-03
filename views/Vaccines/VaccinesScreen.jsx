@@ -16,7 +16,6 @@ import CustomDropdown from "../../components/Dropdown/DropDown";
 import { useNavigation } from "@react-navigation/native";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../database/firebase";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function VaccinesScreen() {
   const navigation = useNavigation();
@@ -29,10 +28,7 @@ export default function VaccinesScreen() {
 
     const fetchTipoAnimalRealtime = async () => {
       try {
-        const id = await AsyncStorage.getItem("mascotaId");
-        if (!id) return;
-
-        const docRef = doc(db, "Mascota", id);
+        const docRef = doc(db, "Mascota", "cartillaPrincipal");
         unsubscribe = onSnapshot(docRef, (docSnap) => {
           if (docSnap.exists()) {
             const data = docSnap.data();
