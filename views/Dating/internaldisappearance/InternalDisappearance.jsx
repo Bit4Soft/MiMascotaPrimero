@@ -2,23 +2,23 @@ import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import MenuScreen from "../../../components/MenuScreen/Menu";
 
-export default function PeriodicReviews() {
+export default function InterlDisappearance() {
   const navigation = useNavigation();
   
   const buttons = [
     {
       text: "Agendar cita",
-      onPress: () => navigation.navigate("NewDate", { tipo: "Revision Periodica" })
+      onPress: () => navigation.navigate("NewDate", { tipo: "Desparasitacion Interna" })
     },
     {
       text: "Citas Agendadas",
-      onPress: () => navigation.navigate("apoiments", { tipo: "Revision Periodica" })
+      onPress: () => navigation.navigate("apoiments", { tipo: "Desparasitacion Interna" })
     }
   ];
 
   return (
     <MenuScreen 
-      title="Revisiones Periódicas"
+      title="Desparacitacion Interna"
       buttons={buttons}
       navigation={navigation}
     />

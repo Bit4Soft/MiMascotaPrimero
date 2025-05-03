@@ -7,8 +7,12 @@ import DatosAdicionales from "../views/Home/MedicalCard/OtherData/OtherData";
 import SucessData from "../views/Home/sucess/sucessdata";
 import EditDataPet from "../views/Home/EditData/EditDataPet";
 import PeriodicReviews from "../views/Dating/Periodicreviews/PeriodicRevies";
-import NewDate from "../views/Dating/Periodicreviews/Newdate/NewDate";
+import NewDate from "../views/Dating/Newdate/NewDate";
 import VaccinesGivenScreen from "../views/Vaccines/VaccinesGivenScreen";
+import RecordVacc from "../views/Dating/RecordVaccines/RecordVaccines";
+import InterlDisappearance from "../views/Dating/internaldisappearance/InternalDisappearance";
+import ExternalDisapparence from "../views/Dating/ExternalDisappearance/ExternalDisappearence";
+import Appointments from "../views/Dating/appointments/appointments";
 
 const Stack = createNativeStackNavigator();
 export default function MainStackNavigator() {
@@ -23,6 +27,10 @@ export default function MainStackNavigator() {
       <Stack.Screen name="Revisiones" component={PeriodicReviews} />
       <Stack.Screen name="NewDate" component={NewDate} />
       <Stack.Screen name="VaccinesGiven" component={VaccinesGivenScreen} />
+      <Stack.Screen name="RecordVac" component={RecordVacc} />
+      <Stack.Screen name="InternalDisap" component={InterlDisappearance} />
+      <Stack.Screen name="ExternalDisap" component={ExternalDisapparence} />
+      <Stack.Screen name="apoiments" component={Appointments} />
     </Stack.Navigator>
   );
 }

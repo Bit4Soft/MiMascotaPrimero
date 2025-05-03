@@ -2,28 +2,36 @@ import React, { useState, useEffect } from "react";
 import {
     SafeAreaView,StatusBar,Text,ScrollView,View,TouchableOpacity,Alert,ActivityIndicator
 } from "react-native";
-import Header from "../../../../components/Layouts/Header";
+import Header from "../../../components/Layouts/Header";
 import styles from "./NewDate.style";
-import InputText from "../../../../components/InputText/InputText";
-import { useNavigation } from "@react-navigation/native";
+import InputText from "../../../components/InputText/InputText";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { doc, getDoc, setDoc, updateDoc, arrayUnion, writeBatch } from "firebase/firestore";
-import { db } from "../../../../database/firebase";
-import CustomDropdown from "../../../../components/Dropdown/DropDown";
+import { db } from "../../../database/firebase";
+import CustomDropdown from "../../../components/Dropdown/DropDown";
+import { formatPhoneNumber } from "../../../utils/formatPhoneNumber";
 
 export default function NewDate() {
     const navigation = useNavigation();
-
+    const route = useRoute();
     const [date, setDate] = useState(new Date());
     const [showPicker, setShowPicker] = useState(false);
     const [availableTimes, setAvailableTimes] = useState([]);
     const [selectedTime, setSelectedTime] = useState(null);
     const [phone, setPhone] = useState("");
     const [notes, setNotes] = useState("");
-    const [tipoRevision, setTipoRevision] = useState("");
     const [loading, setLoading] = useState(false);
     const [fetchingTimes, setFetchingTimes] = useState(false);
+    
+    const [tipo, setTipo] = useState("");
 
+    useEffect(() => {
+        if (route.params?.tipo) {
+          console.log("Nuevo tipo recibido:", route.params.tipo);
+          setTipo(route.params.tipo);
+        }
+      }, [route.params?.tipo]);
     const allTimes = [
         {label: "08:00 AM", value: "08:00 AM"},
         {label: "09:00 AM", value: "09:00 AM"},
@@ -45,10 +53,10 @@ export default function NewDate() {
     
             // Filtramos los objetos completos, no solo strings
             const filtered = allTimes.filter(t => !reserved.includes(t.value));
-            console.log(availableTimes)
+            
             setAvailableTimes(filtered);
         } catch (error) {
-            console.error("Error fetching times:", error);
+           
         } finally {
             setFetchingTimes(false);
         }
@@ -85,7 +93,7 @@ export default function NewDate() {
 
 // Modifica la función saveAppointment:
 const saveAppointment = async () => {
-    if (!selectedTime || !tipoRevision || !phone) {
+    if (!selectedTime || !phone) {
         Alert.alert("Error", "Completa todos los campos requeridos.");
         return;
     }
@@ -117,7 +125,7 @@ const saveAppointment = async () => {
             horario: selectedTime.value,
             telefono: phone,
             notas: notes,
-            tipo: tipoRevision,
+            tipo: tipo,
             creadoEn: new Date(),
             estado: "pendiente" // Estado adicional para seguimiento
         };
@@ -152,7 +160,7 @@ const saveAppointment = async () => {
             <StatusBar />
             <Header
                 title="Cita Nueva"
-                icon={require("../../../../assets/icons/arrow-return.png")}
+                icon={require("../../../assets/icons/arrow-return.png")}
                 onPress={() => navigation.goBack()}
             />
 
@@ -160,11 +168,11 @@ const saveAppointment = async () => {
                 <View style={styles.textContainer}>
                     <Text style={styles.text}>Tipo de revisión</Text>
                 </View>
+                
                 <InputText
-                    placeholder="Ej. Desparasitación, Vacunación, Consulta"
-                    value={tipoRevision}
-                    onChangeText={setTipoRevision}
+                    value={tipo}
                     style={styles.input}
+                    editable={false}
                 />
 
                 <View style={styles.textContainer}>
@@ -172,7 +180,7 @@ const saveAppointment = async () => {
                 </View>
                 {showPicker && (
                     <DateTimePicker
-                    style={ styles.date }
+                    
                         value={date}
                         mode="date"
                         display="default"
@@ -194,39 +202,44 @@ const saveAppointment = async () => {
                     })} </Text> 
                     
                 </TouchableOpacity> 
+
                 <View style={styles.textContainer}>
                     <Text style={styles.text}>Horario</Text>
                 </View>
+                <View style={styles.input}> 
+
                 {fetchingTimes ? (
                     <View style={styles.loadingContainer}>
                         <ActivityIndicator size="small" color="#0000ff" />
                         <Text style={styles.loadingText}>Cargando horarios...</Text>
                     </View>
                 ) : (
-                    console.log("Available Times in NewDate render:", availableTimes),
-                    <CustomDropdown
-                    
+                   
+                    <CustomDropdown 
                     items={availableTimes} 
                     placeholder={fetchingTimes ? "Cargando..." : availableTimes.length ? "Selecciona un horario" : "No hay horarios"}
                     onSelect={(item) => setSelectedTime(item)} 
-                    value={selectedTime} 
+                    value={selectedTime}
                     disabled={fetchingTimes || availableTimes.length === 0}
-                    containerStyle={styles.horario}       // Estilo del contenedor externo
-                    buttonStyle={styles.dropdownButton}
                     
-                />
-                )}
+                    />
 
+                )}
+                </View>
                 <View style={styles.textContainer}>
                     <Text style={styles.text}>Teléfono</Text>
                 </View>
                 <InputText
                     placeholder="Ej. +52 3224322944"
                     value={phone}
-                    onChangeText={setPhone}
+                    onChangeText={(text) => {
+                        const formatted = formatPhoneNumber(text);
+                        setPhone(formatted);
+                    }}
                     style={styles.input}
                     keyboardType="phone-pad"
-                />
+                    />
+
 
                 <View style={styles.textContainer}>
                     <Text style={styles.text}>Notas (Opcional)</Text>
