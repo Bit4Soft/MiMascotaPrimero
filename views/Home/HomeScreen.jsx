@@ -52,6 +52,7 @@ export default function HomeScreen() {
         <ActivityIndicator size="large" color="#355E49" />
       ) : pets.length === 0 ? (
         <View style={styles.content}>
+          <Text style={styles.text}>¡Bienvenido a tu cartilla!</Text>
           <PolaroidCard onPress={handleAddCard} />
         </View>
       ) : (

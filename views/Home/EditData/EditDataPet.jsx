@@ -19,7 +19,14 @@ import PetImagePicker from "../../../components/SelectImage/SelectImage";
 import { formatExpedient } from "../../../utils/formatExpedient";
 
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  deleteDoc,
+  doc,
+  getDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { db, storage } from "../../../database/firebase";
 
 import { useNavigation } from "@react-navigation/native";
@@ -33,6 +40,48 @@ export default function EditDataPet() {
 
   const route = useRoute();
   const { petId } = route.params;
+
+  const deleteAllDocumentsInCollection = async (collectionName) => {
+    try {
+      const colRef = collection(db, collectionName);
+      const snapshot = await getDocs(colRef);
+
+      const deletePromises = snapshot.docs.map((docItem) =>
+        deleteDoc(doc(db, collectionName, docItem.id))
+      );
+
+      await Promise.all(deletePromises);
+      console.log(`Todos los documentos en ${collectionName} eliminados.`);
+    } catch (error) {
+      console.error(
+        `Error al eliminar documentos de ${collectionName}:`,
+        error
+      );
+    }
+  };
+
+  const handleDelete = () => {
+    Alert.alert(
+      "Eliminar datos",
+      "¿Seguro que quieres eliminar la cartilla de tu mascota?",
+      [
+        { text: "Cancelar", style: "cancel" },
+        {
+          text: "Sí, eliminar todo",
+          style: "destructive",
+          onPress: async () => {
+            await deleteAllDocumentsInCollection("Mascota");
+            await deleteAllDocumentsInCollection("Clinicas");
+            await deleteAllDocumentsInCollection("Users");
+            await deleteAllDocumentsInCollection("appointments");
+            await deleteAllDocumentsInCollection("citas");
+
+            navigation.goBack();
+          },
+        },
+      ]
+    );
+  };
 
   const uploadImageAsync = async (uri, petId) => {
     try {
@@ -304,6 +353,17 @@ export default function EditDataPet() {
                 <ActivityIndicator color="#fff" />
               ) : (
                 <Text style={styles.continueButtonText}>Actualizar</Text>
+              )}
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.buttonDelete}
+              onPress={handleDelete}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text style={styles.buttonDeleteText}>Eliminar Cartilla</Text>
               )}
             </TouchableOpacity>
           </View>

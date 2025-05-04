@@ -99,11 +99,11 @@ export default function DatosAdicionales({ route }) {
         imageUrl = await getDownloadURL(storageRef);
       }
 
-      const userRef = await addDoc(collection(db, "Users"), {
-        ...userData,
-      });
+      const userRef = doc(db, "Users", "UserMascota");
+      await setDoc(userRef, { ...userData });
 
-      const clinicRef = await addDoc(collection(db, "Clinicas"), {
+      const clinicRef = doc(db, "Clinicas", "ClinicaMascota");
+      await setDoc(clinicRef, {
         ...clinicaData,
         veterinarios: [
           {
