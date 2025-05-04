@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ActivityIndicator, SafeAreaView, ScrollView } from "react-native";
+import { View, Text, ActivityIndicator, SafeAreaView, ScrollView, Image } from "react-native";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../../database/firebase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import VaccineGiven from "../../../components/Vaccines/VaccineGiven";
-import { vacunasPerros, vacunasGatos } from "../../../constants/vaccinesData";
 import styles from "./RecordVaccines.style";
 import Header from "../../../components/Layouts/Header";
 
@@ -59,7 +58,17 @@ import Header from "../../../components/Layouts/Header";
               />
             ))
           ) : (
-            <Text>No hay vacunas aplicadas.</Text>
+            <>
+            <View>
+
+            <Text style={styles.textempty}>No hay vacunas aplicadas.</Text>
+                  <Image
+                    source={require("../../../assets/icons/vacune.png")} 
+                    style={styles.emptyImage}        
+              />
+            </View>
+            
+            </>
           )}
         </View>
       </ScrollView>

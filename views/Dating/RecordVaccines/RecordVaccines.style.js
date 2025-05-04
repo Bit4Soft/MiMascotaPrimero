@@ -61,4 +61,18 @@ export default StyleSheet.create({
     justifyContent: "center",
     marginTop: 20,
   },
+
+  textempty: {
+    fontSize: 18,
+    color: "#111",
+    textAlign: "center",
+    fontWeight: "bold",
+    top: 20,
+  },
+  emptyImage: {
+    width: 200,
+    height: 200,
+    alignSelf: "center",
+    bottom: -100,
+  },
 });

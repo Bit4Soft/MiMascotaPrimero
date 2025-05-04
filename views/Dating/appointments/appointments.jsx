@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView, ActivityIndicator, SafeAreaView,StatusBar } from "react-native";
+import { View, Text, ScrollView, ActivityIndicator, SafeAreaView,StatusBar, Image } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../database/firebase";
@@ -42,9 +42,20 @@ export default function CitasFiltradas() {
   
     if (citas.length === 0) {
       return (
+        <SafeAreaView style={styles.safeArea}>
+          <Header
+            title="Citas"
+            icon={require("../../../assets/icons/arrow-return.png")}
+            onPress={() => navigation.goBack()}
+          ></Header>
         <View style={styles.center}>
-          <Text>No hay citas registradas para "{tipo}".</Text>
+        <Text style={styles.emptyText}>No hay citas registradas para "{tipo}".</Text>
+        <Image
+          source={require("../../../assets/icons/apoints.png")}
+          style={styles.imagenlogo}></Image>
         </View>
+        
+        </SafeAreaView>
       );
     }
   
