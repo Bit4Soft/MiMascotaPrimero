@@ -50,8 +50,6 @@ export default function NewDate() {
             const docRef = doc(db, "appointments", formattedDate);
             const snapshot = await getDoc(docRef);
             const reserved = snapshot.exists() ? snapshot.data().times : [];
-    
-            // Filtramos los objetos completos, no solo strings
             const filtered = allTimes.filter(t => !reserved.includes(t.value));
             
             setAvailableTimes(filtered);
@@ -86,20 +84,12 @@ export default function NewDate() {
         }
     };
 
-    const validatePhone = (phone) => {
-        const phoneRegex = /^[0-9+\s]+$/;
-        return phoneRegex.test(phone);
-    };
+
 
 // Modifica la función saveAppointment:
 const saveAppointment = async () => {
     if (!selectedTime || !phone) {
         Alert.alert("Error", "Completa todos los campos requeridos.");
-        return;
-    }
-
-    if (!validatePhone(phone)) {
-        Alert.alert("Error", "Ingresa un número de teléfono válido");
         return;
     }
 
@@ -119,7 +109,6 @@ const saveAppointment = async () => {
             return;
         }
 
-        // Crear el objeto de la cita
         const citaData = {
             fecha: formattedDate,
             horario: selectedTime.value,
@@ -127,18 +116,18 @@ const saveAppointment = async () => {
             notas: notes,
             tipo: tipo,
             creadoEn: new Date(),
-            estado: "pendiente" // Estado adicional para seguimiento
+            estado: "pendiente" 
         };
 
-        // Guardar en ambas colecciones de forma atómica
+
         const batch = writeBatch(db);
         
-        // 1. Actualizar disponibilidad
+       
         batch.set(docRef, {
             times: arrayUnion(selectedTime.value)
         }, { merge: true });
         
-        // 2. Crear documento de cita
+       
         batch.set(doc(db, "citas", citaId), citaData);
         
         await batch.commit();
