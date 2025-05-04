@@ -81,13 +81,16 @@ export default StyleSheet.create({
   },
 
   fullWidthButton: {
-    backgroundColor: "#355E49",
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 16,
-    width: "100%",
-    marginTop: 20,
+    backgroundColor: "#245e4b",
+    padding: 15,
+    borderRadius: 8,
     alignItems: "center",
+    marginTop: 20,
+    marginBottom: 30,
+    width: "100%",
+    borderWidth: 1,
+    borderColor: "#fff",
+    borderRadius: 25,
   },
   imageDoc: {
     width: 200,

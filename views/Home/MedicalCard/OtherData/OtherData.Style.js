@@ -24,7 +24,7 @@ export default StyleSheet.create({
     borderBottomColor: "#245e4b",
     paddingBottom: 8,
     textAlign: "center",
-    width: "100%", //
+    width: "100%",
   },
 
   continueButton: {

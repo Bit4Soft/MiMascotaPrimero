@@ -16,6 +16,7 @@ export default StyleSheet.create({
     justifyContent: "center",
   },
   text: {
+    textAlign: "center",
     fontSize: 26,
     fontWeight: "light",
     color: "#1D2951",
